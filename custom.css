@@ -1,0 +1,95 @@
+:lang(ar) {
+    direction: rtl;
+}
+
+.slide .bottom {
+    position: absolute;
+    z-index: 3;
+    top: 600px;
+    font-style: oblique;
+    background-color: transparent;
+}
+
+.slide .center {
+    text-align: center;
+}
+
+.slide .center-block {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.slide .larger {
+    font-size: 300%;
+}
+
+.slide .attribution {
+    font-size: smaller;
+}
+
+.center-block table {
+    margin: auto;
+    width: 100%;
+}
+
+.slide figcaption {
+    width: 30em;
+    margin: auto;
+
+    text-align: center;
+    font-style: oblique;
+    font-size: smaller;
+}
+
+.slide figure img {
+    max-width: 80%;
+    max-height: 65%;
+}
+
+.slide dt {
+    font-weight: bold;
+}
+
+.slide dd {
+    margin-left: 2em;
+    margin-bottom: 4pt;
+}
+
+.slide th {
+    text-align: right;
+}
+
+.slide th.section {
+    background-color: #ccc;
+    text-align: center;
+}
+
+.slide td, .slide th {
+    padding: 2pt 1em;
+}
+
+.slide tr:nth-child(odd) {
+    background-color: #eee;
+} 
+
+.slide .note {
+    margin: .3em auto;
+    width: 80%;
+
+    border: solid yellow 2px;
+    background-color: rgba(255, 255, 0, 0.5);
+    
+    text-align: center;
+}
+
+.slide blockquote.long {
+    font-size: inherit;
+    font-style: inherit;
+    padding: 0 1em;
+}
+
+.slide.deck-previous.collapse-inactive, 
+.slide.deck-before.collapse-inactive
+{
+    display: none;
+}

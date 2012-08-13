@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+        <meta name="viewport" content="width=1024, user-scalable=no">
+
+        <title>Building Global Websites</title>
+	
+        <!-- Required stylesheet -->
+        <link rel="stylesheet" href="deck.js/core/deck.core.css">
+
+        
+        <link rel="stylesheet" href="deck.js/extensions/goto/deck.goto.css">
+        <link rel="stylesheet" href="deck.js/extensions/menu/deck.menu.css">
+        <link rel="stylesheet" href="deck.js/extensions/navigation/deck.navigation.css">
+        <link rel="stylesheet" href="deck.js/extensions/status/deck.status.css">
+        <link rel="stylesheet" href="deck.js/extensions/hash/deck.hash.css">
+
+        <link rel="stylesheet" href="deck.js/themes/style/swiss.css">
+
+        <link rel="stylesheet" href="custom.css">
+	
+        <script src="deck.js/modernizr.custom.js"></script>
+    </head>
+
+    <body class="deck-container">
+        <section class="slide" id="intro">
+            <h1>Building Global Sites</h1>
+        </section>
+
+        <section class="slide" id="background">
+            <h2>Background</h2>
+
+            <ul>
+                <li><a href="#terminology">Terminology</a></li>
+                <li><a href="#culture">Cultural Differences</a></li>
+                <li><a href="#writing-systems">Writing Systems</a></li>
+            </ul>
+        </section>
+            
+        <section class="slide" id="terminology">
+            <h2>Terminology</h2>
+                
+            <aside class="note">
+                These terms are not standardized. Since we're web-oriented, I'll follow the
+                <a href="http://www.w3.org/International/questions/qa-i18n/">W3</a>.
+            </aside>
+            
+            <dl>
+                <dt><dfn>Locale</dfn></dt>
+                <dd>
+                    A collection of preferences defining how a system 
+                    should behave for a target group. For example, users in the 
+                    United States, Great Britain and Australia at least 
+                    theoretically share a language but a choose different ways 
+                    to spell words, display dates and measure.
+                </dd>
+
+                <dt><dfn>Localization (l10n)</dfn></dt>
+                <dd>
+                    A collection of preferences defining how the user interface 
+                    should behave for a locale. This implies a number of 
+                    surprisingly complex topics ranging from how basic text 
+                    processing and number or formatting to questions about 
+                    prefered colors and icons and even legal requirements.
+                </dd>
+
+                <dt><dfn>Internationaliztion (i18n)</dfn></dt>
+                <dd>
+                    Making it <em>easy</em> to localize software: in general 
+                    this involves identifying locale dependency points and 
+                    adding an abstraction mechanism to manage locale-specific 
+                    changes
+                </dd>
+            </dl>
+        </section>
+
+        <section class="slide" id="collation">
+            <h2>Terminology</h2>
+            <h3>Collation</h3>
+
+            <p>Determining how strings compare for the purposes of sorting</p>
+            
+            <div class="center-block">
+        		<table>
+                    <caption>
+                        Sample character collation rules
+                    </caption>
+                    <tr>
+                        <th class="section" colspan="2">By Language</th>
+                    </tr>
+        			<tr>
+        				<th>Swedish:</th>
+        				<td>z &lt; ö</td>
+        			</tr>
+        			<tr>
+        				<th>German:</th>
+        				<td>ö &lt; z</td>
+        			</tr>
+        			<tr>
+        				<th>German:</th>
+        				<td>ß == ss</td>
+        			</tr>
+
+                    <tr>
+                        <th class="section" colspan="2">By Context</th>
+                    </tr>
+        			<tr>
+        				<th>French:</th>
+        				<td>cote &lt; côte &lt; coté &lt; côté</td>
+        			</tr>
+
+                    <tr>
+                        <th class="section" colspan="2">By Usage</th>
+                    </tr>
+        			<tr>
+        				<th>German Dictionary:</th>
+        				<td>of &lt; öf</td>
+        			</tr>
+        			<tr>
+        				<th>German Telephone:</th>
+        				<td>öf &lt; of</td>
+        			</tr>
+        		</table>
+
+                <p class="attribution">
+                    Sources: <cite><a href="http://unicode.org/reports/tr10/">Unicode Technical Standard #10</a></cite>
+                       and <cite><a href="http://en.wikipedia.org/wiki/Alphabetical_order#Language-specific_conventions">Wikipedia: Alphabetical order</a></cite>
+                </p>
+            </div>
+        </section>
+
+        <section class="slide" id="cultural-differences">
+            <h2>Cultural Differences</h2>
+
+            <ol>
+                <li class="slide">Read <a href="http://wiesmann.codiferes.net/wordpress/?p=15187">Falsehoods Programmers Believe About Geography</a></li>
+                <li class="slide">
+                    Read <a href="http://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/">Falsehoods Programmers Believe About Names</a> for a
+                    reminder of just how varied something as simple seeming as a name can be.
+
+                    <div class="slide collapse-inactive">
+                        <p>Here are the first few of 40 points:</p>
+                        <blockquote class="long" cite="http://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/">
+                            <ol>
+                                <li>People have exactly one canonical full name.</li>
+                                <li>People have exactly one full name which they go by.</li>
+                                <li>People have, at this point in time, exactly one canonical full name.</li>
+                                <li>People have, at this point in time, one full name which they go by.</li>
+                            </ol>
+                        </blockquote>
+                    </div>
+                </li>
+                <li class="slide">Read <a href="http://www.cscyphers.com/blog/2012/06/28/falsehoods-programmers-believe-about-gender/">Falsehoods Programmers Believe About Gender</a></li>
+            </ol>
+        </section>
+
+        <section class="slide" id="dealing-with-cultural-differences">
+            <h2>Dealing with Cultural Differences</h2>
+            <ul>
+                <li>
+                    The easiest way to spend less time dealing with complex 
+                    data is not to ask for it: do you really need to know your 
+                    users' gender? This is also a good way to avoid your signup 
+                    process feeling nosy
+                </li>
+                <li>
+                    If you do need data, ask how much structure you need: a 
+                    simple “What name should we display on your profile page?” 
+                    field is much easier than trying to overhaul a simple first 
+                    and last name system after the fact
+                </li>
+                <li>
+                    If you have to model something complicated, plan 
+                    accordingly: use a library or service, test major 
+                    assumptions and potential outliers regularly and think 
+                    about how you'll deal with mistakes before they're critical
+                </li>
+            </ul>
+        </section>
+
+        <section class="slide" id="text-ancient-history">
+            <h2>A Brief History of Electronic Text</h2>
+            <p>Machines work with numbers, so we'll just assign a number to each letter and…</p>
+            <ol>                
+                <li>
+                    <a href="http://en.wikipedia.org/wiki/Baudot_code">Baudot code</a>
+                    (1870) to ITA2 (1930): 5 bits - just enough for the English alphabet
+                </li>
+                <li>
+                    TeleTypeSetter and <a href="http://en.wikipedia.org/wiki/BCD_(6-bit)">BCD</a>: 
+                    6 bits allowed punctuation. Unfortunately, different 
+                    manufacturers used different schemes, making it difficult 
+                    to exchange data or even mix computers and printers
+                </li>
+                <li>
+                    <a href="http://en.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange">ASCII</a> (1963):
+                    7 bits allow both upper <em>and</em> lower case! 
+                    Standardization should also help avoid painful conversion 
+                    issues between manufacturers…
+                </li>
+                <li class="slide">
+                    <p>… but almost everyone outside the United States needs more 
+                    characters and uses 8-bits to store extended characters 
+                    beyond basic ASCII. Worse, it's frequently possible to 
+                    exchange text incorrectly until someone notices the first 
+                    document using one of the different characters!</p>
+                    
+                    <p>Since there are individual languages which need more 
+                    than 256 characters, there's no possibility of a standard 
+                    8-bit (or even 16-bit!) encoding emerging</p>
+                </li>
+            </ol>
+        </section>
+
+        <section class="slide" id="writing-systems">
+            <h2>The Range of Human Writing</h2>
+
+            <figure>
+                <img src="img/WritingSystemsOfTheWorld.svg" />
+                <figcaption>
+                    <a href="http://commons.wikimedia.org/wiki/File%3AWritingSystemsOfTheWorld.svg">Writing Systems of the World</a>
+                    <p class="attribution"><cite>Maximilian Dörrbecker via Wikimedia Commons (<a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a>)</cite></p>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section class="slide" id="unicode">
+            <h2>Unicode</h2>
+
+            <blockquote class="long" cite="http://www.unicode.org/standard/principles.html">
+                <p>The Unicode Standard defines codes for characters used in <em>all the major 
+                    languages written today</em>. Scripts include the European alphabetic scripts, 
+                    Middle Eastern right-to-left scripts, and many scripts of Asia.</p>
+                <p>The Unicode Standard further includes punctuation marks, 
+                diacritics, mathematical symbols, technical symbols, arrows, 
+                dingbats, emoji, etc. … In all, the Unicode Standard, Version 
+                6.0 provides codes for <em>109,449</em> characters from the world&#39;s 
+                alphabets, ideograph sets, and symbol collections.</p>
+                <p><cite><a href="http://www.unicode.org/standard/principles.html">The Unicode® Standard: A Technical Introduction</a></cite></p>
+            </blockquote>
+            <ul>
+                <li>One system to rule them all!</li>
+                <li>
+                    Allowing diacritics to be combined with other characters 
+                    avoids needing a separate value for every permutation:
+                    
+                    <pre>e + ´ = é</pre>
+                </li>
+            </ul>
+        </section>
+        
+        <section class="slide" id="other-unicode-benefits">
+            <h2>Other Unicode Features</h2>
+            
+            <div class="slide collapse-inactive" id="directionality">
+                <h3>Directionality</h3>
+                <figure>
+                    <img src="img/Writing_directions_of_the_world.svg" />
+                    <figcaption>
+                        <a href="http://commons.wikimedia.org/wiki/File%3AWriting_directions_of_the_world.svg">Writing Directions of the World</a>
+                        <p class="attribution"><cite>SPQRobin via Wikimedia Commons (<a href="http://creativecommons.org/licenses/by-sa/3.0">CC-BY-SA-3.0</a>)</p>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="slide" id="complex-scripts">
+                <h3>Complex scripts</h3>
+
+                <p>
+                    We previously discussed how accented characters can be 
+                    formed by combining a base character with the desired 
+                    diacritic. Unicode embraces the discussion and rules for 
+                    not only individual unicode characters but also how they 
+                    combine in context-dependent ways (ligatures).
+                </p>
+                <p>
+                    In English, ligatures are not commonly used - perhaps the 
+                    most common being “ae” in encylopædia - but conjunction 
+                    with a <a href="http://en.wikipedia.org/wiki/Complex_text_layout">complex text layout</a> system,
+                    far more complex adjustments are possible than a simple 
+                    character set could provide.
+                </p>
+                <p lang="ar" class="slide larger center-block">&#x627; &#x644; &#x639; &#x631; &#x628; &#x64A; &#x629;</p>
+                <p lang="ar" class="slide larger center-block">&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629;</p>
+            </div>
+        </section>
+
+        <section class="slide" id="unicode-encodings">
+            <h2>Unicode Encodings</h2>
+            
+            <p>The Unicode standard describes characters and how to process them. It does not specify a single way to represent characters as bytes</p>
+
+            <p>UCS-2, UCS-4, UTF-16, Byte Order Marks, oh my!</p>
+            
+            <p><strong>Use UTF-8!</strong></p>
+        </section>
+        
+        <section class="slide" id="state-of-unicode">
+            <h2>State of Unicode</h2>
+            <h3>… humanity won!</h3>
+            
+            <ul>
+                <li>
+                    In <a href="http://googleblog.blogspot.com/2008/05/moving-to-unicode-51.html">2008</a>,
+                    Google announced that for web content UTF-8 had surpassed ASCII in popularity. In
+                    <a href="http://googleblog.blogspot.com/2010/01/unicode-nearing-50-of-web.html">2010</a>,
+                    it was approaching 50%, and as of
+                    <a href="http://googleblog.blogspot.com/2012/02/unicode-over-60-percent-of-web.html">February 2012</a>
+                    it has passed 60%
+                </li>
+                <li>
+                    <p>All major operating systems and programming languages 
+                    support Unicode, although compatibility is still a 
+                    consideration for the more recent versions, particularly 
+                    for the new emoji characters added in version 6.</p>
+                    <span class="larger">🌏</span>
+                </li> 
+            </ul>
+        </section>        
+
+        <section class="slide" id="unicode-in-python">
+            <h1>Unicode in Python</h1>
+        </section>
+
+        <section class="slide" id="unicode-best-practices">
+        * Best practices
+        * Normalization
+        * regex vs. re
+        </section>
+
+        <section class="slide">
+            <h2>Translating Content</h2>
+        </section>
+
+    
+        <section class="slide">
+            <h2>Static content</h2>
+
+        * Django's built-in support
+        * Tools such as Transifex, Google Translator Toolkit, etc.
+        </section>
+
+        <section class="slide">
+            <h2>Dynamic content</h2>
+
+        * Review of options &amp; tradeoffs
+        * Details about django-modeltranslation and django-hvad
+
+        * Dealing with translators
+</section>
+        <section class="slide">
+            <h2>Search</h2>
+        * Multi-lingual search
+        * Solr strategies
+        * django-haystack challenges
+</section>
+
+    <section class="slide">
+        <h2>Front-end challenges</h2>
+        * Strategies for language selection
+        * URL structure (django-localeurl)
+        * HTTP language negotiation
+        * CSS and HTML strategies
+        * Dealing with mixed LTR and RTL content
+        </section>
+
+
+        <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+        <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+        <!-- deck.status snippet -->
+        <p class="deck-status">
+            <span class="deck-status-current"></span>
+            /
+            <span class="deck-status-total"></span>
+        </p>
+
+        <!-- deck.goto snippet -->
+        <form action="." method="get" class="goto-form">
+            <label for="goto-slide">Go to slide:</label>
+            <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+            <datalist id="goto-datalist"></datalist>
+            <input type="submit" value="Go">
+        </form>
+
+        <!-- deck.hash snippet -->
+        <a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+
+        <script src="deck.js/jquery-1.7.2.min.js"></script>
+        <script src="deck.js/core/deck.core.js"></script>
+
+        <script src="deck.js/core/deck.core.js"></script>
+        <script src="deck.js/extensions/hash/deck.hash.js"></script>
+        <script src="deck.js/extensions/menu/deck.menu.js"></script>
+        <script src="deck.js/extensions/goto/deck.goto.js"></script>
+        <script src="deck.js/extensions/status/deck.status.js"></script>
+        <script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+
+        <script>
+            $(function() {
+                $.deck('.slide');
+            });
+        </script>
+    </body>
+</html>
