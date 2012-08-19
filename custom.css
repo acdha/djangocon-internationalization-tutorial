@@ -32,18 +32,18 @@
     width: 100%;
 }
 
-.slide figcaption {
-    width: 30em;
-    margin: auto;
-
-    text-align: center;
-    font-style: oblique;
-    font-size: smaller;
-}
-
 .slide figure img {
     max-width: 80%;
     max-height: 65%;
+}
+
+.deck-container .slide p,
+.deck-container .slide blockquote p {
+    margin-bottom: .5em;
+}
+
+.slide i {
+    font-style: italic;
 }
 
 .slide dt {
@@ -53,6 +53,7 @@
 .slide dd {
     margin-left: 2em;
     margin-bottom: 4pt;
+    font-size: smaller;
 }
 
 .slide th {
@@ -70,7 +71,7 @@
 
 .slide tr:nth-child(odd) {
     background-color: #eee;
-} 
+}
 
 .slide .note {
     margin: .3em auto;
@@ -78,7 +79,7 @@
 
     border: solid yellow 2px;
     background-color: rgba(255, 255, 0, 0.5);
-    
+
     text-align: center;
 }
 
@@ -88,8 +89,58 @@
     padding: 0 1em;
 }
 
-.slide.deck-previous.collapse-inactive, 
-.slide.deck-before.collapse-inactive
+.slide.deck-previous.collapse-inactive,
+.slide.deck-before.collapse-inactive,
+.slide.deck-previous > p.collapse-inactive,
+.slide.deck-before > p.collapse-inactive
 {
     display: none;
+}
+
+.slide figure {
+    margin: 1em 0;
+}
+
+.slide figcaption {
+    width: 90%;
+    margin: .5em auto;
+    font-size: smaller;
+}
+
+figure.slide > figcaption {
+    font-weight: bold;
+    font-size: inherit;
+}
+
+blockquote[cite]:after,
+q[cite]:after {
+    /* Allow wrapping URLs */
+    white-space: break-word;
+
+    font-family: monofur, monospace;
+}
+
+blockquote[cite]:after {
+    display: block;
+    content: "Source: " attr(cite);
+
+    color: #666;
+
+    font-size: smaller;
+    text-align: right;
+}
+
+q[cite]:after {
+    content: " (" attr(cite) ")";
+}
+
+
+@media print {
+    @page {
+        size: landscape;
+    }
+
+    a:after {
+        content: " (" attr(href) ") ";
+    }
 }

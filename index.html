@@ -6,11 +6,11 @@
         <meta name="viewport" content="width=1024, user-scalable=no">
 
         <title>Building Global Websites</title>
-	
+
         <!-- Required stylesheet -->
         <link rel="stylesheet" href="deck.js/core/deck.core.css">
 
-        
+
         <link rel="stylesheet" href="deck.js/extensions/goto/deck.goto.css">
         <link rel="stylesheet" href="deck.js/extensions/menu/deck.menu.css">
         <link rel="stylesheet" href="deck.js/extensions/navigation/deck.navigation.css">
@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="deck.js/themes/style/swiss.css">
 
         <link rel="stylesheet" href="custom.css">
-	
+
         <script src="deck.js/modernizr.custom.js"></script>
     </head>
 
@@ -38,50 +38,333 @@
                 <li><a href="#writing-systems">Writing Systems</a></li>
             </ul>
         </section>
-            
-        <section class="slide" id="terminology">
+
+        <section class="slide terminology" id="basic-terminology">
             <h2>Terminology</h2>
-                
+
             <aside class="note">
                 These terms are not standardized. Since we're web-oriented, I'll follow the
                 <a href="http://www.w3.org/International/questions/qa-i18n/">W3</a>.
             </aside>
-            
+
             <dl>
                 <dt><dfn>Locale</dfn></dt>
                 <dd>
-                    A collection of preferences defining how a system 
-                    should behave for a target group. For example, users in the 
-                    United States, Great Britain and Australia at least 
-                    theoretically share a language but a choose different ways 
-                    to spell words, display dates and measure.
+                    A collection of preferences defining how a system should
+                    behave for a target group. For example, users in the United
+                    States, Great Britain and Australia mostly share a language
+                    but choose different ways to spell words, display dates and
+                    measure.
                 </dd>
 
                 <dt><dfn>Localization (l10n)</dfn></dt>
                 <dd>
-                    A collection of preferences defining how the user interface 
-                    should behave for a locale. This implies a number of 
-                    surprisingly complex topics ranging from how basic text 
-                    processing and number or formatting to questions about 
+                    A collection of preferences defining how the user interface
+                    should behave for a locale. This implies a number of
+                    surprisingly complex topics ranging from how basic text
+                    processing and number or formatting to questions about
                     prefered colors and icons and even legal requirements.
                 </dd>
 
                 <dt><dfn>Internationaliztion (i18n)</dfn></dt>
                 <dd>
-                    Making it <em>easy</em> to localize software: in general 
-                    this involves identifying locale dependency points and 
-                    adding an abstraction mechanism to manage locale-specific 
+                    Making it <em>easy</em> to localize software: in general
+                    this involves identifying locale dependency points and
+                    adding an abstraction mechanism to manage locale-specific
                     changes
                 </dd>
             </dl>
         </section>
 
-        <section class="slide" id="collation">
+        <section class="slide" id="cultural-differences">
+            <h2>Cultural Differences</h2>
+
+            <p class="collapse-inactive">
+                Localization is about more than cosmetic differences: forget
+                whether the year comes before or after the month in a date,
+                basic beliefs about how the world works vary significantly
+            </p>
+
+            <ol>
+                <li class="slide">
+                    Geography's pretty universal, right?
+
+                    <figure class="slide collapse-inactive" id="geography-falsehoods">
+                        <figcaption class="center"><a href="http://wiesmann.codiferes.net/wordpress/?p=15187">Falsehoods Programmers Believe About Geography</a></figcaption>
+                        <blockquote class="long" cite="http://wiesmann.codiferes.net/wordpress/?p=15187">
+                            <ul>
+                                <li>Places have only one official name</li>
+                                <li>Place names follow the character rules of the language</li>
+                                <li>Place names can be written with the usual character set of a country</li>
+                            </ul>
+                        </blockquote>
+                    </figure>
+                </li>
+                <li class="slide">
+                    Well, what about someone's name?
+
+                    <figure class="slide collapse-inactive" id="name-falsehoods">
+                        <figcaption class="center"><a href="http://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/">Falsehoods Programmers Believe About Names</a></figcaption>
+                        <blockquote class="long" cite="http://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/">
+                            <ol>
+                                <li>People have exactly one canonical full name.</li>
+                                <li>People have exactly one full name which they go by.</li>
+                                <li value="7">People’s names do not change.</li>
+                                <li value="8">People’s names change, but only at a certain enumerated set of events.</li>
+                                <li value="20">People have last names, family names, or anything else which is shared by folks recognized as their relatives.</li>
+                            </ol>
+                        </blockquote>
+                    </figure>
+                </li>
+                <li class="slide">
+                    What about something as simple as a person's gender? That's just biology, right?
+
+                    <figure class="slide collapse-inactive" id="gender-falsehoods">
+                        <figcaption class="center"><a href="http://www.cscyphers.com/blog/2012/06/28/falsehoods-programmers-believe-about-gender/">Falsehoods Programmers Believe About Gender</a></figcaption>
+                        <blockquote class="long" cite="http://www.cscyphers.com/blog/2012/06/28/falsehoods-programmers-believe-about-gender/">
+                            <ul>
+                                <li>There are two and only two genders</li>
+                                <li>Okay, then there are two and only two biological genders.</li>
+                                <li>Gender is determined solely by biology.</li>
+                            </ul>
+                        </blockquote>
+                    </figure>
+                </li>
+            </ol>
+        </section>
+
+        <section class="slide" id="dealing-with-cultural-differences">
+            <h2>Dealing with Cultural Differences</h2>
+            <ul>
+                <li>
+                    The easiest way to spend less time dealing with complex
+                    data is not to ask for it: do you really need to know your
+                    users' gender? This is also a good way to avoid your signup
+                    process feeling nosy
+                </li>
+                <li>
+                    If you do need data, ask how much structure you need: a
+                    simple “What name should we display on your profile page?”
+                    field is easy to start with and much easier than trying to
+                    migrate a simplistic system after it's full of user data
+                </li>
+                <li>
+                    If you have to model something complicated, pay the cost
+                    upfront: use a library or service, test major assumptions
+                    and potential outliers regularly and think about how you'll
+                    deal with problems
+                </li>
+            </ul>
+        </section>
+
+        <section class="slide" id="text-ancient-history">
+            <h2>An Abbreviated History of Electronic Text</h2>
+
+            <p>
+                It's been assumed that there's a unique way to produce each character since the invention of movable type
+            </p>
+
+            <figure>
+                <blockquote class="long">
+                    <p>When he wished to print, he took an iron frame and set
+                    it on the iron plate. In this he placed the types, set
+                    close together. When the frame was full, the whole made one
+                    solid block of type. He then placed it near the fire to
+                    warm it. When the paste [at the back] was slightly melted,
+                    he took a smooth board and pressed it over the surface, so
+                    that the block of type became as even as a whetstone.</p>
+
+                    <p><em>For each character there were several types, and for
+                    certain common characters there were twenty or more types
+                    each,</em> in order to be prepared for the repetition of
+                    characters on the same page. When the characters were not
+                    in use he had them arranged with paper labels, one label
+                    for each rhyme-group, and kept them in wooden cases.</p>
+                </blockquote>
+                <figcaption>
+                    Description of the ceramic movable type system created by Bi
+                    Sheng (990–1051) from Joseph Needham's <u>Science and
+                    Civilisation in China: Volume 5, Chemistry and Chemical
+                    Technology, Part 1, Paper and Printing</u>, as quoted in
+                    Wikipedia's <a href="http://en.wikipedia.org/wiki/Movable_type#History_of_Movable_type">History of Movable type</a>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section class="slide">
+            <h2>An Abbreviated History of Electronic Text</h2>
+            <p>
+                When people started building electronic communication systems,
+                it was easy to continue assigning each character a number.
+                Since early systems needed to be simple, each character was
+                assigned a fixed-length binary number
+            </p>
+            <ul>
+                <li>
+                    <a href="http://en.wikipedia.org/wiki/Baudot_code">Baudot code</a>
+                    (1870) to ITA2 (1930): 5 bits - just enough for the English alphabet
+                </li>
+                <li>
+                    TeleTypeSetter and <a href="http://en.wikipedia.org/wiki/BCD_(6-bit)">BCD</a>:
+                    6 bits allowed punctuation. Unfortunately, different
+                    manufacturers used different schemes, making it difficult
+                    to exchange data or even mix computers and printers from
+                    different manufacturers!
+                </li>
+                <li>
+                    <a href="http://en.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange">ASCII</a> (1963):
+                    7 bits allow both upper <em>and</em> lower case!
+                    Standardization should also help avoid painful conversion
+                    issues between manufacturers…
+                </li>
+                <li class="slide">
+                    <p>… but almost everyone outside the United States needs more
+                    characters and uses 8-bits to store extended characters
+                    beyond basic ASCII. Worse, it's frequently possible to
+                    exchange text incorrectly until someone notices the first
+                    document using one of the different characters!</p>
+
+                    <p>Since there are individual languages which need more
+                    than 256 characters, there's no possibility of a standard
+                    8-bit (or even 16-bit!) encoding emerging</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="slide" id="writing-systems">
+            <h2>The Range of Human Writing</h2>
+
+            <figure>
+                <img src="img/WritingSystemsOfTheWorld.svg" />
+                <figcaption class="center">
+                    <a href="http://commons.wikimedia.org/wiki/File%3AWritingSystemsOfTheWorld.svg">Writing Systems of the World</a>
+                    <p class="attribution"><cite>Maximilian Dörrbecker via Wikimedia Commons (<a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a>)</cite></p>
+                </figcaption>
+            </figure>
+        </section>
+
+        <section class="slide" id="unicode">
+            <h2>Unicode</h2>
+
+            <figure>
+                <figcaption><a href="http://www.unicode.org/standard/principles.html">The Unicode® Standard: A Technical Introduction</a></figcaption>
+                <blockquote class="long" cite="http://www.unicode.org/standard/principles.html">
+                    <p>The Unicode Standard defines codes for characters used in <em>all the major
+                        languages written today</em>. Scripts include the European alphabetic scripts,
+                        Middle Eastern right-to-left scripts, and many scripts of Asia.</p>
+                    <p>The Unicode Standard further includes punctuation marks,
+                    diacritics, mathematical symbols, technical symbols, arrows,
+                    dingbats, emoji, etc. … In all, the Unicode Standard, Version
+                    6.0 provides codes for <em>109,449</em> characters from the world&#39;s
+                    alphabets, ideograph sets, and symbol collections.</p>
+                </blockquote>
+            </figure>
+
+        </section>
+
+        <section class="slide terminology" id="terminology-unicode">
+            <h2>Terminology</h2>
+
+            <dl>
+                <dt>Character</dt>
+                <dd>
+                    <q cite="http://www.unicode.org/glossary/#character">
+                        The smallest component of written language that has semantic value; refers to the abstract meaning…
+                    </q>
+                    <p><strong>Key concept: this is not the same as a byte!</strong></p>
+                </dd>
+
+                <dt><dfn>Diacritic</dfn></dt>
+                <dd>
+                    <q cite="http://www.unicode.org/glossary/#diacritic">
+                        A mark applied or attached to a symbol to create a new
+                        symbol that represents a modified or new value. (2) A
+                        mark applied to a symbol irrespective of whether it
+                        changes the value of that symbol. In the latter case,
+                        the diacritic usually represents an independent value
+                        (for example, an accent, tone, or some other linguistic
+                        information).
+                    </q>
+                </dd>
+
+                <dt>Grapheme Cluster</dt>
+                <dt><dfn>Combining Character</dfn></dt>
+                <dd>
+                    Unicode supports a key concept that multiple characters can
+                    be combined to produce a single displayed character
+                    (generally anything a user would consider the same is a
+                    “grapheme cluster”).
+
+                    <table>
+                        <tr>
+                            <td colspan="3">&eacute;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">LATIN SMALL LETTER E WITH ACUTE (U+00E9)</td>
+                        </tr>
+                        <tr>
+                            <td>e&#x301;</td>
+                            <td>e</td>
+                            <td>&acute;</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>LATIN SMALL LETTER E (U+0065)</td>
+                            <td>COMBINING ACUTE ACCENT (U+0301)</td>
+                        </tr>
+                    </table>
+
+                    <p class="center">In Unicode, these are the same!</p>
+                </dd>
+            </dl>
+        </section>
+
+        <section class="slide terminology" id="terminology-unicode-2">
+            <h2>Terminology</h2>
+
+            <dl>
+                <dt>Equivalence</dt>
+                <dd>
+                    <p>Unicode provides rules to determine when characters are
+                    exactly the same (e.g. U+00F1 = U+006E + U+0303 = ñ) and also
+                    when they are functionally the same (e.g. &#xFB00; == "ff" for
+                    searching but not display).</p>
+
+                    <p>
+                        This can also apply to numbers – these are all mathematically equivalent but have significantly different semantic meaning:<br/>
+                        5Ƽƽ٥۵५৫੫૫୫௫౫೫൫๕໕༥၅፭៥᠕⁵₅Ⅴⅴ⑤⑸⓹❺➄➎〥㈤５𐄋𐌡𝟓𝟧𝟱𝟻
+                    </p>
+                </dd>
+
+                <dt><dfn>Case Mapping</dfn></dt>
+                <dd>
+                    Various alphabets (Latin, Georgian, Armenian, Cyrillic,
+                    etc.) have the concept of “case” and Unicode has rules for
+                    converting text from one case to another, including the
+                    various language-specific complications this can entail:
+                    for example, the German ß (SMALL LETTER SHARP S) converts
+                    to uppercase as “SS”
+
+                    (see <cite><a href="http://unicode.org/reports/tr21/tr21-5.html">Unicode Standard Annex #21: CASE MAPPINGS</a></cite>).
+                </dd>
+
+                <dt>Case Folding</dt>
+                <dd>
+                    Case folding is a similar process, generally used for
+                    caseless comparisons (e.g. search). In Unicode this is
+                    an expanded form of the lowercase mapping which is
+                    consistent but the output is not suitable for display to
+                    users
+                </dd>
+            </dl>
+        </section>
+
+        <section class="slide" id="terminology-collation">
             <h2>Terminology</h2>
             <h3>Collation</h3>
 
             <p>Determining how strings compare for the purposes of sorting</p>
-            
+
             <div class="center-block">
         		<table>
                     <caption>
@@ -100,7 +383,7 @@
         			</tr>
         			<tr>
         				<th>German:</th>
-        				<td>ß == ss</td>
+        				<td><abbr title="LATIN SMALL LETTER SHARP S">ß</abbr> = ss</td>
         			</tr>
 
                     <tr>
@@ -131,176 +414,56 @@
             </div>
         </section>
 
-        <section class="slide" id="cultural-differences">
-            <h2>Cultural Differences</h2>
-
-            <ol>
-                <li class="slide">Read <a href="http://wiesmann.codiferes.net/wordpress/?p=15187">Falsehoods Programmers Believe About Geography</a></li>
-                <li class="slide">
-                    Read <a href="http://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/">Falsehoods Programmers Believe About Names</a> for a
-                    reminder of just how varied something as simple seeming as a name can be.
-
-                    <div class="slide collapse-inactive">
-                        <p>Here are the first few of 40 points:</p>
-                        <blockquote class="long" cite="http://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/">
-                            <ol>
-                                <li>People have exactly one canonical full name.</li>
-                                <li>People have exactly one full name which they go by.</li>
-                                <li>People have, at this point in time, exactly one canonical full name.</li>
-                                <li>People have, at this point in time, one full name which they go by.</li>
-                            </ol>
-                        </blockquote>
-                    </div>
-                </li>
-                <li class="slide">Read <a href="http://www.cscyphers.com/blog/2012/06/28/falsehoods-programmers-believe-about-gender/">Falsehoods Programmers Believe About Gender</a></li>
-            </ol>
-        </section>
-
-        <section class="slide" id="dealing-with-cultural-differences">
-            <h2>Dealing with Cultural Differences</h2>
-            <ul>
-                <li>
-                    The easiest way to spend less time dealing with complex 
-                    data is not to ask for it: do you really need to know your 
-                    users' gender? This is also a good way to avoid your signup 
-                    process feeling nosy
-                </li>
-                <li>
-                    If you do need data, ask how much structure you need: a 
-                    simple “What name should we display on your profile page?” 
-                    field is much easier than trying to overhaul a simple first 
-                    and last name system after the fact
-                </li>
-                <li>
-                    If you have to model something complicated, plan 
-                    accordingly: use a library or service, test major 
-                    assumptions and potential outliers regularly and think 
-                    about how you'll deal with mistakes before they're critical
-                </li>
-            </ul>
-        </section>
-
-        <section class="slide" id="text-ancient-history">
-            <h2>A Brief History of Electronic Text</h2>
-            <p>Machines work with numbers, so we'll just assign a number to each letter and…</p>
-            <ol>                
-                <li>
-                    <a href="http://en.wikipedia.org/wiki/Baudot_code">Baudot code</a>
-                    (1870) to ITA2 (1930): 5 bits - just enough for the English alphabet
-                </li>
-                <li>
-                    TeleTypeSetter and <a href="http://en.wikipedia.org/wiki/BCD_(6-bit)">BCD</a>: 
-                    6 bits allowed punctuation. Unfortunately, different 
-                    manufacturers used different schemes, making it difficult 
-                    to exchange data or even mix computers and printers
-                </li>
-                <li>
-                    <a href="http://en.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange">ASCII</a> (1963):
-                    7 bits allow both upper <em>and</em> lower case! 
-                    Standardization should also help avoid painful conversion 
-                    issues between manufacturers…
-                </li>
-                <li class="slide">
-                    <p>… but almost everyone outside the United States needs more 
-                    characters and uses 8-bits to store extended characters 
-                    beyond basic ASCII. Worse, it's frequently possible to 
-                    exchange text incorrectly until someone notices the first 
-                    document using one of the different characters!</p>
-                    
-                    <p>Since there are individual languages which need more 
-                    than 256 characters, there's no possibility of a standard 
-                    8-bit (or even 16-bit!) encoding emerging</p>
-                </li>
-            </ol>
-        </section>
-
-        <section class="slide" id="writing-systems">
-            <h2>The Range of Human Writing</h2>
-
+        <section class="slide" id="directionality">
+            <h2>Directionality</h2>
             <figure>
-                <img src="img/WritingSystemsOfTheWorld.svg" />
-                <figcaption>
-                    <a href="http://commons.wikimedia.org/wiki/File%3AWritingSystemsOfTheWorld.svg">Writing Systems of the World</a>
-                    <p class="attribution"><cite>Maximilian Dörrbecker via Wikimedia Commons (<a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a>)</cite></p>
+                <img src="img/Writing_directions_of_the_world.svg" />
+                <figcaption class="center">
+                    <a href="http://commons.wikimedia.org/wiki/File%3AWriting_directions_of_the_world.svg">Writing Directions of the World</a>
+                    <p class="attribution"><cite>SPQRobin via Wikimedia Commons (<a href="http://creativecommons.org/licenses/by-sa/3.0">CC-BY-SA-3.0</a>)</cite></p>
                 </figcaption>
             </figure>
         </section>
 
-        <section class="slide" id="unicode">
-            <h2>Unicode</h2>
-
-            <blockquote class="long" cite="http://www.unicode.org/standard/principles.html">
-                <p>The Unicode Standard defines codes for characters used in <em>all the major 
-                    languages written today</em>. Scripts include the European alphabetic scripts, 
-                    Middle Eastern right-to-left scripts, and many scripts of Asia.</p>
-                <p>The Unicode Standard further includes punctuation marks, 
-                diacritics, mathematical symbols, technical symbols, arrows, 
-                dingbats, emoji, etc. … In all, the Unicode Standard, Version 
-                6.0 provides codes for <em>109,449</em> characters from the world&#39;s 
-                alphabets, ideograph sets, and symbol collections.</p>
-                <p><cite><a href="http://www.unicode.org/standard/principles.html">The Unicode® Standard: A Technical Introduction</a></cite></p>
-            </blockquote>
-            <ul>
-                <li>One system to rule them all!</li>
-                <li>
-                    Allowing diacritics to be combined with other characters 
-                    avoids needing a separate value for every permutation:
-                    
-                    <pre>e + ´ = é</pre>
-                </li>
-            </ul>
-        </section>
-        
-        <section class="slide" id="other-unicode-benefits">
-            <h2>Other Unicode Features</h2>
-            
-            <div class="slide collapse-inactive" id="directionality">
-                <h3>Directionality</h3>
-                <figure>
-                    <img src="img/Writing_directions_of_the_world.svg" />
-                    <figcaption>
-                        <a href="http://commons.wikimedia.org/wiki/File%3AWriting_directions_of_the_world.svg">Writing Directions of the World</a>
-                        <p class="attribution"><cite>SPQRobin via Wikimedia Commons (<a href="http://creativecommons.org/licenses/by-sa/3.0">CC-BY-SA-3.0</a>)</p>
-                    </figcaption>
-                </figure>
-            </div>
-
-            <div class="slide" id="complex-scripts">
-                <h3>Complex scripts</h3>
-
-                <p>
-                    We previously discussed how accented characters can be 
-                    formed by combining a base character with the desired 
-                    diacritic. Unicode embraces the discussion and rules for 
-                    not only individual unicode characters but also how they 
-                    combine in context-dependent ways (ligatures).
-                </p>
-                <p>
-                    In English, ligatures are not commonly used - perhaps the 
-                    most common being “ae” in encylopædia - but conjunction 
-                    with a <a href="http://en.wikipedia.org/wiki/Complex_text_layout">complex text layout</a> system,
-                    far more complex adjustments are possible than a simple 
-                    character set could provide.
-                </p>
-                <p lang="ar" class="slide larger center-block">&#x627; &#x644; &#x639; &#x631; &#x628; &#x64A; &#x629;</p>
-                <p lang="ar" class="slide larger center-block">&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629;</p>
-            </div>
-        </section>
-
         <section class="slide" id="unicode-encodings">
             <h2>Unicode Encodings</h2>
-            
-            <p>The Unicode standard describes characters and how to process them. It does not specify a single way to represent characters as bytes</p>
 
-            <p>UCS-2, UCS-4, UTF-16, Byte Order Marks, oh my!</p>
-            
-            <p><strong>Use UTF-8!</strong></p>
+            <p>
+                The Unicode standard describes characters and how to process
+                them. How do we encode those characters for interchange?
+            </p>
+
+            <p>
+                When the Unicode initiative started, early momentum followed
+                the precedent of earlier double-byte systems and produced
+                a fixed 16-bit encoding (UCS-2). This rapidly demonstrated
+                several problems:
+            </p>
+
+            <ol>
+                <li>
+                    Unlike bytes, words can be stored in different orders. To
+                    distinguish between big-endian and little-endian order
+                    (UNIX vs. NUXI) requires an unambiguous <abbr title="Byte Order Mark">BOM</abbr>
+                    added at the start of every string
+                </li>
+                <li><strong>All</strong> existing text would need to be converted!</li>
+                <li>All text becomes more expensive to store and process</li>
+                <li>It wasn't enough: Chinese alone would require at least 3 bytes!</li>
+            </ol>
+
+            <p>
+                UTF-8 was developed to avoid these problems: as a variable
+                length-encoding scheme using bytes, all existing 7-bit ASCII
+                text is automatically valid, byte-order marks are unnecessary
+                and every Unicode character can be encoded without
+                incompatibility.
+            </p>
         </section>
-        
+
         <section class="slide" id="state-of-unicode">
             <h2>State of Unicode</h2>
-            <h3>… humanity won!</h3>
-            
+
             <ul>
                 <li>
                     In <a href="http://googleblog.blogspot.com/2008/05/moving-to-unicode-51.html">2008</a>,
@@ -311,30 +474,70 @@
                     it has passed 60%
                 </li>
                 <li>
-                    <p>All major operating systems and programming languages 
-                    support Unicode, although compatibility is still a 
-                    consideration for the more recent versions, particularly 
-                    for the new emoji characters added in version 6.</p>
-                    <span class="larger">🌏</span>
-                </li> 
+                    <p>
+                        All major operating systems and programming languages
+                        support Unicode, although compatibility is still a
+                        consideration for the more recent features added in
+                        <a href="http://babelstone.blogspot.com/2009/11/whats-new-in-unicode-60.html">version 6</a> such as <a href="http://www.unicode.org/~scherer/emoji4unicode/snapshot/emojidata.html">emoji</a> (🌏) or regional indicators (&#x1F1FA; &#x1F1F8; = &#x1F1FA;&#x1F1F8;)
+                    </p>
+                </li>
             </ul>
-        </section>        
+            <p class="larger center">Summary: <strong>use UTF-8!</strong></p>
+        </section>
+
+        <section class="slide" id="complex-scripts">
+            <h2>Complex scripts</h2>
+
+            <p>
+                We previously discussed how accented characters can be formed
+                by combining a base character with the desired diacritic. The
+                concept of multiple characters producing a visually distinct
+                glyph is relatively unusual in English, where only a few
+                ligatures are at all commonly used - perhaps the best known
+                being the “ae” in encylopædia - but other languages depend on
+                this behaviour.
+            </p>
+            <p>
+                A <a href="http://en.wikipedia.org/wiki/Complex_text_layout">complex text layout</a>
+                system allows the visual display to be significantly altered
+                based on the context. If you need to support complex languages
+                this will affect your font choices and design options!
+            </p>
+            <div class="slide">
+                <figure>
+                    <figcaption class="center">
+                        The name of the Arabic language as individual characters and written normally
+                    </figcaption>
+                    <p lang="ar" class="center-block larger">
+                        <span class="slide">&#x627; &#x644; &#x639; &#x631; &#x628; &#x64A; &#x629;</span>
+                        <span class="slide">&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629;</span>
+                    </p>
+                </figure>
+            </div>
+        </section>
 
         <section class="slide" id="unicode-in-python">
             <h1>Unicode in Python</h1>
         </section>
 
         <section class="slide" id="unicode-best-practices">
-        * Best practices
-        * Normalization
-        * regex vs. re
+            <h2>Unicode Best Practices</h2>
+
+            <ul>
+                <li>
+                    Always decode immediately on input and encode on output:
+                    <pre><code>s = foo.read().decode("utf-8")  # Fail on invalid input</code></pre>
+                    <pre><code>print >>foo, s.encode("utf-8")</code></pre>
+                </li>
+                <li>Normalization</li>
+                <li>regex vs. re</li>
+            </ul>
         </section>
 
         <section class="slide">
             <h2>Translating Content</h2>
         </section>
 
-    
         <section class="slide">
             <h2>Static content</h2>
 
@@ -349,7 +552,8 @@
         * Details about django-modeltranslation and django-hvad
 
         * Dealing with translators
-</section>
+        </section>
+
         <section class="slide">
             <h2>Search</h2>
         * Multi-lingual search
