@@ -429,23 +429,18 @@
             <h2>Unicode Encodings</h2>
 
             <p>
-                The Unicode standard describes characters and how to process
-                them. How do we encode those characters for interchange?
-            </p>
-
-            <p>
-                When the Unicode initiative started, early momentum followed
-                the precedent of earlier double-byte systems and produced
-                a fixed 16-bit encoding (UCS-2). This rapidly demonstrated
-                several problems:
+                The Unicode standard describes abstract characters but we need
+                a way to convert them into bytes for storage and exchange.
+                Early experiments which simply doubled 8-bit ASCII to 16-bits
+                revealed significant problems:
             </p>
 
             <ol>
                 <li>
-                    Unlike bytes, words can be stored in different orders. To
-                    distinguish between big-endian and little-endian order
-                    (UNIX vs. NUXI) requires an unambiguous <abbr title="Byte Order Mark">BOM</abbr>
-                    added at the start of every string
+                    Not every processor stores the bytes comprising a 16-bit
+                    integer the same way — big-endian (“UNIX”) or little-endian
+                    (“NUXI”) — necessitating a special byte-order mark (BOM) at
+                    the start of the string simply to decode it
                 </li>
                 <li><strong>All</strong> existing text would need to be converted!</li>
                 <li>All text becomes more expensive to store and process</li>
@@ -453,11 +448,13 @@
             </ol>
 
             <p>
-                UTF-8 was developed to avoid these problems: as a variable
-                length-encoding scheme using bytes, all existing 7-bit ASCII
-                text is automatically valid, byte-order marks are unnecessary
-                and every Unicode character can be encoded without
-                incompatibility.
+                UTF-8 was developed to avoid these problems. It's
+                <a href="http://tools.ietf.org/html/rfc3629#page-4">a very
+                clever variable-length encoding scheme</a> under which all
+                existing 7-bit ASCII is valid, all common non-Asian characters
+                require only 2 bytes, common CJK still needs only 3-bytes,
+                using 4 bytes only for rare and historical characters. Because
+                it's read one byte at a time, there's no need for a BOM.
             </p>
         </section>
 
