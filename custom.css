@@ -6,7 +6,7 @@
     position: absolute;
     z-index: 3;
     top: 600px;
-    font-style: oblique;
+    width: 100%;
     background-color: transparent;
 }
 
@@ -17,6 +17,19 @@
 .slide .center-block {
     width: 70%;
     margin: 0 auto;
+}
+
+.slide ul.inline {
+    margin: 0;
+    padding: 0;
+}
+
+.slide .inline > li {
+    display: inline-block;
+}
+
+.slide .inline > li + li:before {
+    content: "✦ ";
 }
 
 .slide .larger {
