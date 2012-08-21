@@ -323,7 +323,7 @@
             <h2>Terminology</h2>
 
             <dl>
-                <dt>Equivalence</dt>
+                <dt id="equivalence">Equivalence</dt>
                 <dd>
                     <p>Unicode provides rules to determine when characters are
                     exactly the same (e.g. U+00F1 = U+006E + U+0303 = ñ) and also
@@ -473,9 +473,12 @@
                 <li>
                     <p>
                         All major operating systems and programming languages
-                        support Unicode, although compatibility is still a
-                        consideration for the more recent features added in
-                        <a href="http://babelstone.blogspot.com/2009/11/whats-new-in-unicode-60.html">version 6</a> such as <a href="http://www.unicode.org/~scherer/emoji4unicode/snapshot/emojidata.html">emoji</a> (🌏) or regional indicators (&#x1F1FA; &#x1F1F8; = &#x1F1FA;&#x1F1F8;)
+                        support Unicode and UTF-8, although compatibility is
+                        still a consideration for the more recent features
+                        added in
+                        <a href="http://babelstone.blogspot.com/2009/11/whats-new-in-unicode-60.html">version 6</a>
+                        such as <a href="http://www.unicode.org/~scherer/emoji4unicode/snapshot/emojidata.html">emoji</a> (🌏)
+                        or regional indicators (&#x1F1FA; &#x1F1F8; = &#x1F1FA;&#x1F1F8;)
                     </p>
                 </li>
             </ul>
@@ -517,19 +520,108 @@
             <h1>Unicode in Python</h1>
         </section>
 
+        <section class="slide" id="unicode-in-python2">
+            <h2>Unicode in Python 2.x</h2>
+            <p>
+                There's a persistent misconception that you need Python 3 to
+                support Unicode. This is untrue: "" may produce a <code>str</code> (i.e. bytes)
+                instance but simply prefixing any string with <code>u</code>
+                produces a full <code>unicode</code> object. Python 2 will even
+                helpfully convert them when you mix the two:
+            </p>
+
+            <pre><code>&gt;&gt;&gt; type(&quot;foo&quot;)
+&lt;type &#x27;<b>str</b>&#x27;&gt;
+&gt;&gt;&gt; type(u&quot;bar&quot;)
+&lt;type &#x27;<b>unicode</b>&#x27;&gt;
+&gt;&gt;&gt; &quot;foo&quot; + u&quot;bar&quot;
+u&#x27;foobar&#x27;</code></pre>
+
+            <p>
+                This looks easy but it hides an annoying problem: to preserve
+                compatibility with older code Python 2 assumes anything not
+                known to be unicode is valid ASCII. You can build a system and
+                still get a <code>UnicodeDecodeError</code> the first time a
+                non-ASCII value enters the “tested” system because your test
+                was all ASCII…
+            </p>
+        </section>
+
+        <section class="slide" id="unicode-in-python3">
+            <h2>Unicode in Python 3.x</h2>
+            <h3>Explicit is better than implicit</h3>
+
+            <p>Learning from what was problematic in Python 2, the default
+            string type is <code>unicode</code> and you have to explictly
+            request the new <code>bytes</code> type if you want a
+            byte-string:</p>
+
+            <pre><code>&gt;&gt;&gt; &quot;f&uuml;bar&quot; + b&quot;bytes&quot;
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+TypeError: Can&#x27;t convert &#x27;bytes&#x27; object to str implicitly
+&gt;&gt;&gt; &quot;f&uuml;bar&quot; + b&quot;bytes&quot;.decode(&quot;utf-8&quot;)
+&#x27;f&uuml;barbytes&#x27;</code></pre>
+
+            <p class="center">Python 2 fails later; Python 3 forces you to clean up the mess now</p>
+        </section>
+
         <section class="slide" id="unicode-best-practices">
             <h2>Unicode Best Practices</h2>
 
+            <p class="center note">These rules are the same for Python 2 and 3 so you won't need to change when Django migrates</p>
+
             <ul>
                 <li>
-                    Always decode immediately on input and encode on output:
-                    <pre><code>s = foo.read().decode("utf-8")  # Fail on invalid input</code></pre>
-                    <pre><code>print >>foo, s.encode("utf-8")</code></pre>
+                    Your code should use Unicode internally - that's what
+                    Django, json, etc. provide and it's as simple as using
+                    <code>u""</code> for literals
                 </li>
-                <li>Normalization</li>
-                <li>regex vs. re</li>
+                <li>Always decode data as soon as you receive it and encode on the way out:
+                    <pre><code>s = foo.read().decode("utf-8")<br/>print >>foo, s.encode("utf-8")</code></pre>
+                </li>
+                <li>
+                    Decide how to handle invalid values: you can ignore or drop
+                    them but it's usually best to report an error so your users
+                    can fix the data. If not:
+                    <pre><code>s = foo.read().decode("utf-8", "ignore")</code></pre>
+                </li>
             </ul>
         </section>
+
+        <section class="slide" id="unicode-normalization">
+            <h2>Unicode Best Practices</h2>
+            <h3><a href="http://unicode.org/faq/normalization.html">Normalization</a></h3>
+
+            <p>
+                There are <a href="#terminology-unicode-2">multiple ways to
+                display many characters</a>, producing situations where a
+                program treats two values as different even though they appear
+                identical to the user. We can avoid this problem by normalizing
+                everything to a consistent internal representation for
+                comparison:
+            </p>
+            <pre><code>&gt;&gt;&gt; from unicodedata import normalize
+&gt;&gt;&gt; u&quot;\N{LATIN SMALL LETTER E WITH ACUTE}&quot; == u&quot;\N{LATIN SMALL LETTER E}\N{COMBINING ACUTE ACCENT}&quot;
+False
+&gt;&gt;&gt; normalize(&quot;NFC&quot;, u&quot;\N{LATIN SMALL LETTER E WITH ACUTE}&quot;) == normalize(&quot;NFC&quot;, u&quot;e\N{COMBINING ACUTE ACCENT}&quot;)
+True</code></pre>
+        </section>
+
+        <section class="slide" id="re-vs-regex">
+            <h2>Unicode Best Practices</h2>
+            <h3>re vs. regex</h3>
+        </section>
+
+        <section class="slide" id="re-vs-regex">
+            <h2>Unicode in Django</h2>
+
+            <ol>
+                <li>Watch those database defaults</li>
+                <li>Normalization model mixin</li>
+            </ol>
+        </section>
+
 
         <section class="slide">
             <h2>Translating Content</h2>
