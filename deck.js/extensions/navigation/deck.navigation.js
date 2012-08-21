@@ -11,7 +11,7 @@ This module adds clickable previous and next links to the deck.
 */
 (function($, deck, undefined) {
 	var $d = $(document),
-	
+
 	/* Updates link hrefs, and disabled states if last/first slide */
 	updateButtons = function(e, from, to) {
 		var opts = $[deck]('getOptions'),
@@ -21,7 +21,7 @@ This module adds clickable previous and next links to the deck.
 		hrefBase = window.location.href.replace(/#.*/, ''),
 		prevId = prevSlide ? prevSlide.attr('id') : undefined,
 		nextId = nextSlide ? nextSlide.attr('id') : undefined;
-		
+
 		$(opts.selectors.previousLink)
 			.toggleClass(opts.classes.navDisabled, !to)
 			.attr('href', hrefBase + '#' + (prevId ? prevId : ''));
@@ -29,19 +29,19 @@ This module adds clickable previous and next links to the deck.
 			.toggleClass(opts.classes.navDisabled, to === last)
 			.attr('href', hrefBase + '#' + (nextId ? nextId : ''));
 	};
-	
+
 	/*
 	Extends defaults/options.
-	
+
 	options.classes.navDisabled
 		This class is added to a navigation link when that action is disabled.
 		It is added to the previous link when on the first slide, and to the
 		next link when on the last slide.
-		
+
 	options.selectors.nextLink
 		The elements that match this selector will move the deck to the next
 		slide when clicked.
-		
+
 	options.selectors.previousLink
 		The elements that match this selector will move to deck to the previous
 		slide when clicked.
@@ -50,7 +50,7 @@ This module adds clickable previous and next links to the deck.
 		classes: {
 			navDisabled: 'deck-nav-disabled'
 		},
-		
+
 		selectors: {
 			nextLink: '.deck-next-link',
 			previousLink: '.deck-prev-link'
@@ -62,7 +62,7 @@ This module adds clickable previous and next links to the deck.
 		slides = $[deck]('getSlides'),
 		$current = $[deck]('getSlide'),
 		ndx;
-		
+
 		// Setup prev/next link events
 		$(opts.selectors.previousLink)
 		.unbind('click.decknavigation')
@@ -70,14 +70,14 @@ This module adds clickable previous and next links to the deck.
 			$[deck]('prev');
 			e.preventDefault();
 		});
-		
+
 		$(opts.selectors.nextLink)
 		.unbind('click.decknavigation')
 		.bind('click.decknavigation', function(e) {
 			$[deck]('next');
 			e.preventDefault();
 		});
-		
+
 		// Find where we started in the deck and set initial states
 		$.each(slides, function(i, $slide) {
 			if ($slide === $current) {

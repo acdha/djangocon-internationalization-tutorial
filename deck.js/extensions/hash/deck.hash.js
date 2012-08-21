@@ -19,10 +19,10 @@ slide.
 (function ($, deck, window, undefined) {
 	var $d = $(document),
 	$window = $(window),
-	
+
 	/* Collection of internal fragment links in the deck */
 	$internals,
-	
+
 	/*
 	Internal only function.  Given a string, extracts the id from the hash,
 	matches it to the appropriate slide, and navigates there.
@@ -30,25 +30,25 @@ slide.
 	goByHash = function(str) {
 		var id = str.substr(str.indexOf("#") + 1),
 		slides = $[deck]('getSlides');
-		
+
 		$.each(slides, function(i, $el) {
 			if ($el.attr('id') === id) {
 				$[deck]('go', i);
 				return false;
 			}
 		});
-		
+
 		// If we don't set these to 0 the container scrolls due to hashchange
 		$[deck]('getContainer').scrollLeft(0).scrollTop(0);
 	};
-	
+
 	/*
 	Extends defaults/options.
-	
+
 	options.selectors.hashLink
 		The element matching this selector has its href attribute updated to
 		the hash of the current slide as the user navigates through the deck.
-		
+
 	options.hashPrefix
 		Every slide that does not have an id is assigned one at initialization.
 		Assigned ids take the form of hashPrefix + slideIndex, e.g., slide-0,
@@ -63,37 +63,37 @@ slide.
 		selectors: {
 			hashLink: '.deck-permalink'
 		},
-		
+
 		hashPrefix: 'slide-',
 		preventFragmentScroll: true
 	});
-	
-	
+
+
 	$d.bind('deck.init', function() {
 	   var opts = $[deck]('getOptions');
 		$internals = $(),
 		slides = $[deck]('getSlides');
-		
+
 		$.each(slides, function(i, $el) {
 			var hash;
-			
+
 			/* Hand out ids to the unfortunate slides born without them */
 			if (!$el.attr('id') || $el.data('deckAssignedId') === $el.attr('id')) {
 				$el.attr('id', opts.hashPrefix + i);
 				$el.data('deckAssignedId', opts.hashPrefix + i);
 			}
-			
+
 			hash ='#' + $el.attr('id');
-			
+
 			/* Deep link to slides on init */
 			if (hash === window.location.hash) {
 				$[deck]('go', i);
 			}
-			
+
 			/* Add internal links to this slide */
 			$internals = $internals.add('a[href="' + hash + '"]');
 		});
-		
+
 		if (!Modernizr.hashchange) {
 			/* Set up internal links using click for the poor browsers
 			without a hashchange event. */
@@ -101,7 +101,7 @@ slide.
 				goByHash($(this).attr('href'));
 			});
 		}
-		
+
 		/* Set up first id container state class */
 		if (slides.length) {
 			$[deck]('getContainer').addClass(opts.classes.onPrefix + $[deck]('getSlide').attr('id'));
@@ -114,16 +114,16 @@ slide.
 		opts = $[deck]('getOptions'),
 		osp = opts.classes.onPrefix,
 		$c = $[deck]('getContainer');
-		
+
 		$c.removeClass(osp + $[deck]('getSlide', from).attr('id'));
 		$c.addClass(osp + $[deck]('getSlide', to).attr('id'));
-		
+
 		$(opts.selectors.hashLink).attr('href', hashPath);
 		if (Modernizr.history) {
 			window.history.replaceState({}, "", hashPath);
 		}
 	});
-	
+
 	/* Deals with internal links in modern browsers */
 	$window.bind('hashchange.deckhash', function(e) {
 		if (e.originalEvent && e.originalEvent.newURL) {
