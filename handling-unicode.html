@@ -225,6 +225,29 @@
         <section class="slide" id="re-vs-regex">
             <h2>Unicode Best Practices</h2>
             <h3>re vs. regex</h3>
+
+            <p>
+                If you need to process text using regular expressions, you'll
+                quickly learn that even with Python 3 there are significant
+                drawbacks with the built-in re module. The
+                <a href="http://pypi.python.org/pypi/regex">regex</a> module
+                is the successor being developed as a standalone library for
+                ease of testing and it has much better Unicode support:
+            </p>
+
+            <code class="block">
+                &gt;&gt;&gt; re.match(r&quot;(?i)strasse&quot;, u&quot;stra\N{LATIN SMALL LETTER SHARP S}e&quot;, flags=re.UNICODE)<br>
+                None<br>
+                &gt;&gt;&gt; regex.match(ur&quot;(?iV1)strasse&quot;, u&quot;stra\N{LATIN SMALL LETTER SHARP S}e&quot;)<br>
+                &lt;_regex.Match object at …&gt;<br>
+                &gt;&gt;&gt; regex.match(ur&quot;(?iV1)stra\N{LATIN SMALL LETTER SHARP S}e&quot;, &quot;STRASSE&quot;)<br>
+                &lt;_regex.Match object at …&gt;<br>
+            </code>
+            <p class="note">
+                regex's smart behaviour depends on either <a
+                href="http://pypi.python.org/pypi/regex#flags">setting the
+                Unicode flag</a> or using a Unicode string as the pattern!
+            </p>
         </section>
 
         <section class="slide" id="unicode-in-django">
