@@ -23,7 +23,7 @@ body, .deck-container {
 .slide .bottom {
     position: absolute;
     z-index: 3;
-    top: 600px;
+    top: 92%;
     width: 100%;
     background-color: transparent;
 }
