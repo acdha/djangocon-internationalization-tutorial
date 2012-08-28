@@ -81,6 +81,16 @@ body, .deck-container {
     font-weight: bold;
 }
 
+.slide samp.block, .slide code.block {
+    display: block;
+    border: dashed #ccc 1px;
+    padding: 1px 3px;
+    margin: 2pt;
+    margin-bottom: 6pt;
+    font-size: smaller;
+    color: #666;
+}
+
 .slide dt {
     font-weight: bold;
 }
