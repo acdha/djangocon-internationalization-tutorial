@@ -27,52 +27,83 @@
     <body class="deck-container">
         <section class="slide">
             <h1>Handling Unicode</h1>
+
+            <p class="center bottom">Background: <a href="http://docs.python.org/howto/unicode.html" title="Unicode HOWTO">http://docs.python.org/howto/unicode.html</a></p>
         </section>
 
         <section class="slide" id="unicode-in-python2">
             <h2>Unicode in Python 2.x</h2>
             <p>
                 There's a persistent misconception that you need Python 3 to
-                support Unicode. This is untrue: "" may produce a <code>str</code> (i.e. bytes)
-                instance but simply prefixing any string with <code>u</code>
-                produces a full <code>unicode</code> object. Python 2 will even
-                helpfully convert them when you mix the two:
+                support Unicode. This is untrue: the default <code>""</code>
+                may produce a <code>str</code> (i.e. bytes without a specified
+                encoding) instance but simply prefixing any string with
+                <code>u</code> produces a full <code>unicode</code> object.
             </p>
+            <p>Python 2 will even helpfully convert them when you mix the two:</p>
 
-            <pre><code>&gt;&gt;&gt; type(&quot;foo&quot;)
-&lt;type &#x27;<b>str</b>&#x27;&gt;
-&gt;&gt;&gt; type(u&quot;bar&quot;)
-&lt;type &#x27;<b>unicode</b>&#x27;&gt;
-&gt;&gt;&gt; &quot;foo&quot; + u&quot;bar&quot;
-u&#x27;foobar&#x27;</code></pre>
+            <samp class="block">
+                &gt;&gt;&gt; type(&quot;foo&quot;)<br>
+                &lt;type &#x27;<b>str</b>&#x27;&gt;<br>
+                &gt;&gt;&gt; type(u&quot;bar&quot;)<br>
+                &lt;type &#x27;<b>unicode</b>&#x27;&gt;<br>
+                &gt;&gt;&gt; &quot;foo&quot; + u&quot;bar&quot;<br>
+                u&#x27;foobar&#x27;
+            </samp>
+
+            <p class="center">Not so bad, right?</p>
+        </section>
+
+        <section class="slide" id="unicode-in-python2-the-bad-parts">
+            <h2>Unicode in Python 2.x: the bad parts</h2>
 
             <p>
-                This looks easy but it hides an annoying problem: to preserve
-                compatibility with older code Python 2 assumes anything not
-                known to be unicode is valid ASCII. You can build a system and
-                still get a <code>UnicodeDecodeError</code> the first time a
-                non-ASCII value enters the “tested” system because your test
-                was all ASCII…
+                To preserve compatibility with existing code, Python 2 assumes
+                byte-strings are ASCII. This means that any input source is a
+                risk of <code>UnicodeDecodeError</code>s:
             </p>
+
+            <samp class="block">
+                &gt;&gt;&gt; s = &quot; &quot;.join([&#x27;I&#x27;, <b class="mistake">'\xe2\x98\xba'</b>, &#x27;Unicode&#x27;])<br>
+                &gt;&gt;&gt; print s  <i># Raw UTF-8 displays correctly in my UTF-8 terminal</i><br>
+                I &#x263A; Unicode<br>
+                &gt;&gt;&gt; unicode(s)<br>
+                Traceback (most recent call last):<br>
+                  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;<br>
+                UnicodeDecodeError: &#x27;ascii&#x27; codec can&#x27;t decode byte 0xe2 in position 2: ordinal not in range(128)<br>
+            </samp>
+
+            <p>Everything works if you know the encoding and remember to decode first:</p>
+            <samp class="block">
+                &gt;&gt;&gt; s.decode(&quot;utf-8&quot;)<br>
+                u&#x27;I \u263a Unicode&#x27;
+            </samp>
+
         </section>
 
         <section class="slide" id="unicode-in-python3">
             <h2>Unicode in Python 3.x</h2>
             <h3>Explicit is better than implicit</h3>
 
-            <p>Learning from what was problematic in Python 2, the default
-            string type is <code>unicode</code> and you have to explictly
-            request the new <code>bytes</code> type if you want a
-            byte-string:</p>
+            <p>
+                Learning from what was problematic in Python 2, the default
+                string type is <code>unicode</code>, with a separate
+                <code>bytes</code> type for raw I/O. You can't mix the two
+                without an explicit conversion:
+            </p>
 
-            <pre><code>&gt;&gt;&gt; &quot;f&uuml;bar&quot; + b&quot;bytes&quot;
-Traceback (most recent call last):
-  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
-TypeError: Can&#x27;t convert &#x27;bytes&#x27; object to str implicitly
-&gt;&gt;&gt; &quot;f&uuml;bar&quot; + b&quot;bytes&quot;.decode(&quot;utf-8&quot;)
-&#x27;f&uuml;barbytes&#x27;</code></pre>
+            <samp class="block">
+                &gt;&gt;&gt; &quot;☹&quot; + b&quot;bytes&quot;<br>
+                Traceback (most recent call last):<br>
+                  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;<br>
+                TypeError: Can&#x27;t convert &#x27;bytes&#x27; object to str implicitly<br>
+                &gt;&gt;&gt; &quot;☺&quot; + b&quot; bytes&quot;.decode(&quot;ascii&quot;)<br>
+                &#x27;☺ bytes&#x27;<br>
+                &gt;&gt;&gt; &quot;&#x263A;&quot;.encode(&quot;utf-8&quot;) + b&quot; bytes&quot;<br>
+                b&#x27;\xe2\x98\xba bytes&#x27;<br>
+            </samp>
 
-            <p class="center">Python 2 fails later; Python 3 forces you to clean up the mess now</p>
+            <p class="center">Python 2 fails later; Python 3 forces you to fix it now</p>
         </section>
 
         <section class="slide" id="unicode-best-practices">
@@ -82,20 +113,64 @@ TypeError: Can&#x27;t convert &#x27;bytes&#x27; object to str implicitly
 
             <ul>
                 <li>
-                    Your code should use Unicode internally - that's what
-                    Django, json, etc. provide and it's as simple as using
-                    <code>u""</code> for literals
-                </li>
-                <li>Always decode data as soon as you receive it and encode on the way out:
-                    <pre><code>s = foo.read().decode("utf-8")<br/>print >>foo, s.encode("utf-8")</code></pre>
+                    <strong>Always use Unicode internally</strong>
                 </li>
                 <li>
-                    Decide how to handle invalid values: you can ignore or drop
-                    them but it's usually best to report an error so your users
-                    can fix the data. If not:
-                    <pre><code>s = foo.read().decode("utf-8", "ignore")</code></pre>
+                    <strong>Always convert to Unicode as soon as you receive something and encode it when you send it</strong>
+                </li>
+                <li>
+                    <strong>Decide how to handle invalid values</strong>
                 </li>
             </ul>
+        </section>
+
+        <section class="slide" id="unicode-conversion">
+            <h2>Unicode Best Practices</h2>
+            <h3>I/O Conversion</h3>
+
+            <p>
+                The most basic form involves str and anything str-like where
+                you want to convert everything as soon as you see it:
+            </p>
+            <code class="block">
+                s = foo.read().decode("utf-8")<br>
+                print >>foo, s.encode("utf-8")
+            </code>
+
+            <p>
+                For files, you might want to use the <a
+                href="http://docs.python.org/library/codecs.html">codecs</a>
+                module so you can read from the file normally and receive
+                Unicode characters instead of byte-strings:
+            </p>
+            <samp class="block">
+                &gt;&gt;&gt; import codecs<br>
+                &gt;&gt;&gt; with codecs.open(foo_file, encoding=&quot;utf-8&quot;) as f:<br>
+                &gt;&gt;&gt;     &hellip;
+            </samp>
+        </section>
+
+        <section class="slide" id="invalid-unicode">
+            <h2>Unicode Best Practices</h2>
+            <h3>Handling invalid data</h3>
+
+            <p>
+                In general the best policy is to reject invalid text so the
+                user can correct it immediately. However, in a batch context
+                you might need to process what you can. Python allows you to
+                “ignore” or strip anything which fails to decode:
+            </p>
+
+            <code class="block">foo.decode("utf-8", "ignore")</code>
+
+            <p>
+                It may be preferable to instead replace each invalid character
+                with the
+                <a href="http://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character">Unicode Replacement character �</a>
+                to clearly indicate that data was lost:
+            </p>
+
+            <code class="block">foo.decode("utf-8", "replace")</code>
         </section>
 
         <section class="slide" id="unicode-normalization">
@@ -103,18 +178,48 @@ TypeError: Can&#x27;t convert &#x27;bytes&#x27; object to str implicitly
             <h3><a href="http://unicode.org/faq/normalization.html">Normalization</a></h3>
 
             <p>
-                There are <a href="#terminology-unicode-2">multiple ways to
+                There are <a href="background.html#terminology-unicode-2">multiple ways to
                 display many characters</a>, producing situations where a
                 program treats two values as different even though they appear
                 identical to the user. We can avoid this problem by normalizing
                 everything to a consistent internal representation for
                 comparison:
             </p>
-            <pre><code>&gt;&gt;&gt; from unicodedata import normalize
-&gt;&gt;&gt; u&quot;\N{LATIN SMALL LETTER E WITH ACUTE}&quot; == u&quot;\N{LATIN SMALL LETTER E}\N{COMBINING ACUTE ACCENT}&quot;
-False
-&gt;&gt;&gt; normalize(&quot;NFC&quot;, u&quot;\N{LATIN SMALL LETTER E WITH ACUTE}&quot;) == normalize(&quot;NFC&quot;, u&quot;e\N{COMBINING ACUTE ACCENT}&quot;)
-True</code></pre>
+            <samp class="block">
+                &gt;&gt;&gt; from unicodedata import normalize<br>
+                &gt;&gt;&gt; precomposed = u&quot;\N{LATIN SMALL LETTER E WITH ACUTE}&quot;
+                &gt;&gt;&gt; decomposed = u&quot;\N{LATIN SMALL LETTER E}\N{COMBINING ACUTE ACCENT}&quot;<br>
+                &gt;&gt;&gt; precomposed == decomposed<br>
+                False<br>
+                &gt;&gt;&gt; normalize(&quot;NFC&quot;, precomposed) == normalize(&quot;NFC&quot;, decomposed)<br>
+                True
+            </samp>
+        </section>
+
+        <section class="slide" id="unicode-numeric-value">
+            <h2>Other tricks from Python's unicodedata module</h2>
+            <h3>Comparing numbers with Unicode</h3>
+
+            <p>
+                Python's <a href="http://docs.python.org/library/unicodedata.html">unicodedata</a>
+                module has other features for working with Unicode text. Several of them allow you
+                to retrieve information about characters, as in this example which generated the
+                different characters in the
+                <a href="background.html#terminology-unicode-2">numeric equivalence example</a>:
+            </p>
+            <code class="block">
+            from __future__ import print_function, unicode_literals<br>
+            from unicodedata import decimal<br>
+            import sys<br>
+            <br>
+            if sys.version_info[0] == 3:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;unichr = chr<br>
+            <br>
+            for i in range(0, sys.maxunicode):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;u = unichr(i)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;if decimal(u, None) == 5:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(u.encode("utf-8"))<br>
+            </code>
         </section>
 
         <section class="slide" id="re-vs-regex">
@@ -122,13 +227,18 @@ True</code></pre>
             <h3>re vs. regex</h3>
         </section>
 
-        <section class="slide" id="re-vs-regex">
+        <section class="slide" id="unicode-in-django">
             <h2>Unicode in Django</h2>
 
             <ol>
+                <li>smart_unicode / smart_str</li>
                 <li>Watch those database defaults</li>
-                <li>Normalization model mixin</li>
             </ol>
+        </section>
+
+        <section class="slide" id="django-normalization">
+            <h2>Normalizing your data</h2>
+
         </section>
 
         <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>

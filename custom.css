@@ -63,6 +63,10 @@ body, .deck-container {
     width: 100%;
 }
 
+.slide .mistake {
+    color: red;
+}
+
 .slide figure img {
     max-width: 80%;
     max-height: 65%;
