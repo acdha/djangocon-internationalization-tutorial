@@ -30,7 +30,7 @@
 
             <div class="bottom">
                 <ul class="inline center">
-                    <li><a href="#terminology">Terminology</a></li>
+                    <li><a href="#basic-terminology">Terminology</a></li>
                     <li><a href="#cultural-differences">Cultural Differences</a></li>
                     <li><a href="#writing">Writing</a></li>
                 </ul>
@@ -64,7 +64,7 @@
                     prefered colors and icons and even legal requirements.
                 </dd>
 
-                <dt><dfn>Internationaliztion (i18n)</dfn></dt>
+                <dt><dfn>Internationalization (i18n)</dfn></dt>
                 <dd>
                     Making it <em>easy</em> to localize software: in general
                     this involves identifying locale dependency points and
@@ -198,9 +198,9 @@
             <h2>An Abbreviated History of Electronic Text</h2>
             <p>
                 When people started building electronic communication systems,
-                it was easy to continue assigning each character a number.
-                Since early systems needed to be simple, each character was
-                assigned a fixed-length binary number
+                it was easy to continue assigning each distinct character a
+                number. Since early systems needed to be simple each character
+                was assigned a fixed-length binary number
             </p>
             <ul>
                 <li>
@@ -208,11 +208,12 @@
                     (1870) to ITA2 (1930): 5 bits - just enough for the English alphabet
                 </li>
                 <li>
-                    TeleTypeSetter and <a href="http://en.wikipedia.org/wiki/BCD_(6-bit)">BCD</a>:
-                    6 bits allowed punctuation. Unfortunately, different
-                    manufacturers used different schemes, making it difficult
-                    to exchange data or even mix computers and printers from
-                    different manufacturers!
+                    TeleTypeSetter and
+                    <a href="http://en.wikipedia.org/wiki/BCD_(6-bit)">BCD</a>
+                    (1928): 6 bits allowed punctuation. Unfortunately,
+                    different manufacturers used different schemes, making it
+                    difficult to exchange data or even mix computers and
+                    printers from different manufacturers!
                 </li>
                 <li>
                     <a href="http://en.wikipedia.org/wiki/American_Standard_Code_for_Information_Interchange">ASCII</a> (1963):
@@ -221,15 +222,16 @@
                     issues between manufacturers…
                 </li>
                 <li class="slide">
-                    <p>… but almost everyone outside the United States needs more
-                    characters and uses 8-bits to store extended characters
-                    beyond basic ASCII. Worse, it's frequently possible to
-                    exchange text incorrectly until someone notices the first
-                    document using one of the different characters!</p>
+                    <p>… but almost everyone outside the United States needs
+                    more characters and uses 8-bits to store extended
+                    characters beyond basic ASCII. Worse, it's frequently
+                    possible to exchange text incorrectly until someone notices
+                    the first document using one of the different
+                    characters!</p>
 
                     <p>Since there are individual languages which need more
                     than 256 characters, there's no possibility of a standard
-                    8-bit (or even 16-bit!) encoding emerging</p>
+                    8-bit encoding emerging</p>
                 </li>
             </ul>
         </section>
@@ -274,7 +276,7 @@
                     <q cite="http://www.unicode.org/glossary/#character">
                         The smallest component of written language that has semantic value; refers to the abstract meaning…
                     </q>
-                    <p><strong>Key concept: this is not the same as a byte!</strong></p>
+                    <p><strong>Key concept: this is not the same as a byte or number!</strong></p>
                 </dd>
 
                 <dt><dfn>Diacritic</dfn></dt>
@@ -298,26 +300,24 @@
                     (generally anything a user would consider the same is a
                     “grapheme cluster”).
 
-                    <table>
+                    <table class="center-block align-right">
                         <tr>
-                            <td colspan="3">&eacute;</td>
+                            <td colspan="3"><samp>é</samp></td>
                         </tr>
                         <tr>
                             <td colspan="3">LATIN SMALL LETTER E WITH ACUTE (U+00E9)</td>
                         </tr>
                         <tr>
-                            <td>e&#x301;</td>
-                            <td>e</td>
-                            <td>&acute;</td>
+                            <td><samp>e</samp></td>
+                            <td><samp>´</samp></td>
+                            <td><samp>é</samp></td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td>LATIN SMALL LETTER E (U+0065)</td>
                             <td>COMBINING ACUTE ACCENT (U+0301)</td>
+                            <td></td>
                         </tr>
                     </table>
-
-                    <p class="center">In Unicode, these are the same!</p>
                 </dd>
             </dl>
         </section>
@@ -524,7 +524,9 @@
                         added in
                         <a href="http://babelstone.blogspot.com/2009/11/whats-new-in-unicode-60.html">version 6</a>
                         such as <a href="http://www.unicode.org/~scherer/emoji4unicode/snapshot/emojidata.html">emoji</a> (🌏)
-                        or regional indicators (&#x1F1FA; &#x1F1F8; = &#x1F1FA;&#x1F1F8;)
+                        or regional indicators (
+                        &#x1F1FA; &#x1F1F8; = &#x1F1FA;&#x1F1F8;,
+                        &#x1F1EB; &#x1F1F7; = &#x1F1EB;&#x1F1F7;, etc.)
                     </p>
                 </li>
             </ul>

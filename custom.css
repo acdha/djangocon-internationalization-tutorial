@@ -37,6 +37,10 @@ body, .deck-container {
     margin: 0 auto;
 }
 
+.slide .align-right {
+    text-align: right;
+}
+
 .slide ul.inline {
     margin: 0;
     padding: 0;
