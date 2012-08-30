@@ -145,8 +145,7 @@
             </p>
             <samp class="block">
                 &gt;&gt;&gt; import codecs<br>
-                &gt;&gt;&gt; with codecs.open(foo_file, encoding=&quot;utf-8&quot;) as f:<br>
-                &gt;&gt;&gt;     &hellip;
+                &gt;&gt;&gt; my_file = codecs.open(foo_file, encoding=&quot;utf-8&quot;)
             </samp>
         </section>
 
@@ -187,7 +186,7 @@
             </p>
             <samp class="block">
                 &gt;&gt;&gt; from unicodedata import normalize<br>
-                &gt;&gt;&gt; precomposed = u&quot;\N{LATIN SMALL LETTER E WITH ACUTE}&quot;
+                &gt;&gt;&gt; precomposed = u&quot;\N{LATIN SMALL LETTER E WITH ACUTE}&quot;<br>
                 &gt;&gt;&gt; decomposed = u&quot;\N{LATIN SMALL LETTER E}\N{COMBINING ACUTE ACCENT}&quot;<br>
                 &gt;&gt;&gt; precomposed == decomposed<br>
                 False<br>
