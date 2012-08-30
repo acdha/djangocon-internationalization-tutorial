@@ -5,7 +5,7 @@
         <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
         <meta name="viewport" content="width=1024, user-scalable=no">
 
-        <title>Building Global Websites</title>
+        <title>Handling Unicode in Python &amp; Django</title>
 
         <!-- Required stylesheet -->
         <link rel="stylesheet" href="deck.js/core/deck.core.css">
@@ -27,12 +27,11 @@
     <body class="deck-container">
         <section class="slide">
             <h1>Handling Unicode</h1>
-
-            <p class="center bottom">Background: <a href="http://docs.python.org/howto/unicode.html" title="Unicode HOWTO">http://docs.python.org/howto/unicode.html</a></p>
         </section>
 
         <section class="slide" id="unicode-in-python2">
             <h2>Unicode in Python 2.x</h2>
+
             <p>
                 There's a persistent misconception that you need Python 3 to
                 support Unicode. This is untrue: the default <code>""</code>
@@ -40,6 +39,7 @@
                 encoding) instance but simply prefixing any string with
                 <code>u</code> produces a full <code>unicode</code> object.
             </p>
+
             <p>Python 2 will even helpfully convert them when you mix the two:</p>
 
             <samp class="block">
@@ -51,7 +51,7 @@
                 u&#x27;foobar&#x27;
             </samp>
 
-            <p class="center">Not so bad, right?</p>
+            <p class="center bottom">Background: <a href="http://docs.python.org/howto/unicode.html" title="Unicode HOWTO">http://docs.python.org/howto/unicode.html</a></p>
         </section>
 
         <section class="slide" id="unicode-in-python2-the-bad-parts">
@@ -193,6 +193,25 @@
                 &gt;&gt;&gt; normalize(&quot;NFC&quot;, precomposed) == normalize(&quot;NFC&quot;, decomposed)<br>
                 True
             </samp>
+            <aside>
+                <p>
+                    Those <code>\N{<i>name</i>}</code> Unicode named literals
+                    are a handy way to avoid confusion in your source code.
+                    Your source should be saved as UTF-8 but that doesn't make
+                    it any easier to quickly read a string with visually similar
+                    characters or changes in directionality which are tricky to
+                    work with in many text editors.
+                </p>
+                <p>
+                    Set your source code with this comment on the first line or
+                    second if you're writing a shell-script:<br>
+                    <code class="block"># encoding: utf-8</code>
+                    <code class="block">
+                        #!/usr/bin/env python<br>
+                        # encoding: utf-8
+                    </code>
+                </p>
+            </aside>
         </section>
 
         <section class="slide" id="unicode-numeric-value">
@@ -252,15 +271,170 @@
         <section class="slide" id="unicode-in-django">
             <h2>Unicode in Django</h2>
 
-            <ol>
-                <li>smart_unicode / smart_str</li>
-                <li>Watch those database defaults</li>
-            </ol>
+            <blockquote class="long" cite="https://docs.djangoproject.com/en/1.4/ref/unicode/">
+                A bytestring does not carry any information with it about its
+                encoding. For that reason, we have to make an assumption, and
+                Django assumes that all bytestrings are in UTF-8.<br>
+                …<br>
+                In most cases when Django is dealing with strings, it
+                will convert them to Unicode strings before doing
+                anything else. So, as a general rule, if you pass in a
+                bytestring, be prepared to receive a Unicode string
+                back in the result.
+            </blockquote>
+
+            <div class="slide">
+                <h4>Handy Utilities</h4>
+                <ul class="slide collapse-inactive">
+                    <li>
+                        <a href="https://docs.djangoproject.com/en/1.4/ref/utils/#django.utils.encoding.smart_unicode">django.utils.encoding.smart_unicode()</a>:
+                        attempts to convert the input to a <code>unicode</code>
+                        instance. Set <code>strings_only=False</code> to leave
+                        numbers, boolean and <code>None</code> unconverted
+                    </li>
+
+                    <li>
+                        <a href="https://docs.djangoproject.com/en/1.4/ref/utils/#django.utils.encoding.force_unicode">django.utils.encoding.force_unicode()</a>:
+                        almost identical to <code>smart_unicode</code> except that
+                        lazy translations will be processed
+                    </li>
+
+                    <li>
+                        <a href="https://docs.djangoproject.com/en/1.4/ref/utils/#django.utils.encoding.smart_str">django.utils.encoding.smart_str()</a>:
+                        converts the input to a byte-string. Set
+                        <code>strings_only=False</code> to leave numbers, boolean
+                        and <code>None</code> unconverted
+                    </li>
+                </ul>
+                <ul class="slide collapse-inactive">
+                    <li>
+                        <a href="https://docs.djangoproject.com/en/1.4/ref/utils/#django.utils.encoding.iri_to_uri">django.utils.encoding.iri_to_uri()</a>
+                        correctly encodes Unicode domain IRIs:<br>
+                        <a href="http://xn--n3h.net/">http://xn--n3h.net/</a> == <a href="http://☃.net">http://☃.net</a>
+                    </li>
+                    <li>
+                        <a href="https://docs.djangoproject.com/en/1.4/ref/utils/#django.utils.http.urlquote">django.utils.http.urlquote()</a>
+                        and
+                        <a href="https://docs.djangoproject.com/en/1.4/ref/utils/#django.utils.http.urlquote_plus">django.utils.http.urlquote_plus()</a>
+                        are Unicode-safe versions of the stdlib utilities with the
+                        same names
+                    </li>
+                </ul>
+            </div>
+
+            <p class="note slide">
+                See the official
+                <a href="https://docs.djangoproject.com/en/1.4/ref/unicode/">Django Unicode</a>
+                documentation for more information
+            </p>
         </section>
 
-        <section class="slide" id="django-normalization">
-            <h2>Normalizing your data</h2>
+        <section class="slide" id="django-and-databases">
+            <h2>Unicode in databases</h2>
 
+            <p>
+                Django attempts to use Unicode for communication with the
+                database. There's only one catch but it's significant: you
+                <em>must</em> ensure that the database is configured to use a
+                Unicode encoding when you create it. Otherwise you'll probably
+                be able to store data but queries may be erratic - remember
+                collation? - and data can be lost or truncated: thanks to
+                UTF-8's variable length, a <code>VARCHAR(20)</code> could
+                require up to 80 bytes to store!
+            </p>
+        </section>
+
+        <section class="slide" id="mysql-unicode">
+            <h2>Unicode in databases: MySQL</h2>
+
+            <aside>
+                <p>
+                    n.b. MySQL's <code>utf8</code> only supports up to 3 bytes,
+                    breaking on newer or obscure characters such as emoji.
+                    <code>utf8mb4</code> support 4-bytes but requires MySQL 5.5!
+                </p>
+
+                <p>
+                    The older <code>utf8_general_ci</code> is faster than
+                    <code>utf8_unicode_ci</code> because it only compares
+                    single characters without performing the full Unicode
+                    collation rules (e.g. <samp>ß</samp> == <samp>ss</samp>)
+                </p>
+            </aside>
+
+            <h4>Per database</h4>
+            <code class="block">CREATE DATABASE my_site CHARACTER SET utf8 COLLATE utf8_unicode_ci;</code>
+
+            <h4>Server-Wide (recommended)</h4>
+
+            <code class="block">
+                [mysqld]<br>
+                character-set-server = utf8<br>
+                collation-server = utf8_unicode_ci
+            </code>
+
+            <aside>
+                If you use Amazon Web Services, here are step-by-step
+                instructions for
+                <a href="https://gist.github.com/1084682">creating a UTF-8
+                Amazon RDS database</a>
+            </aside>
+
+            <p class="center note">
+                See
+                <a href="http://dev.mysql.com/doc/refman/5.1/en/globalization.html" title="MySQL :: MySQL 5.1 Reference Manual :: 10 Globalization">http://dev.mysql.com/doc/refman/5.1/en/globalization.html</a>
+            </p>
+        </section>
+
+        <section class="slide" id="postgresql-unicode">
+            <h2>Unicode in databases: PostgreSQL</h2>
+
+            <h4>Per database</h4>
+
+            <code class="block">CREATE DATABASE my_app WITH ENCODING 'UTF8';</code>
+            or
+            <code class="block">createdb -E UTF8 myapp</code>
+
+            <h4>Server-Wide (recommended)</h4>
+            <code class="block">initdb -E UTF8</code>
+
+            <p class="center note">
+                See
+                <a href="http://www.postgresql.org/docs/9.1/static/multibyte.html" title="PostgreSQL: Documentation: 9.1: Character Set Support">PostgreSQL: Character Set Support</a>
+            </p>
+        </section>
+
+        <section class="slide" id="model-data-normalization">
+            <h2>Normalizing your model data</h2>
+
+            <p class="note">
+                <strong>There is no one right approach</strong>: you need to
+                validate your inputs at every point. No matter how reputable
+                the source, the odds are good they'll send you odd data sooner
+                than you expect
+            </p>
+
+            <p>
+                My fledgling
+                <a href="https://github.com/acdha/django-i18n-utils">django-i18n-utils</a>
+                package provides an example of one approach:
+                <a href="https://github.com/acdha/django-i18n-utils/blob/master/django_i18n_utils/models.py#L11"><code>UnicodeNormalizerMixin</code></a>
+                uses the standard
+                <a href="https://docs.djangoproject.com/en/1.4/ref/models/instances/#django.db.models.Model.clean_fields">
+                    model validation <code>clean_fields()</code>
+                </a> method to normalize all text fields to Unicode NFC:
+            </p>
+
+            <code class="block">
+                class Person(UnicodeNormalizerMixin, models.Model):<br>
+                    name = models.CharField(…)
+            </code>
+
+            <p>
+                This works well as long as you scrupulously call
+                <code>clean()</code> before saving a model. Since this is
+                important for other reasons, make it a key point in testing
+            </p>
         </section>
 
         <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
