@@ -201,6 +201,22 @@ figure.slide > figcaption {
     font-size: inherit;
 }
 
+.deck-container q {
+    quotes: '“' '”' '‘' '’';
+}
+
+.deck-container q:lang(fr) {
+    quotes: '« ' ' »' '“' '”';
+}
+
+.deck-container q:before {
+    content: open-quote;
+}
+
+.deck-container q:after {
+    content: close-quote;
+}
+
 blockquote[cite]:after,
 q[cite]:after {
     /* Allow wrapping URLs */
@@ -221,6 +237,9 @@ q[cite]:after {
     content: " (" attr(cite) ")";
 }
 
+.deck-container blockquote q {
+    font-style: oblique;
+}
 
 @media print {
     @page {
