@@ -29,13 +29,95 @@
             <h1>Design Strategies</h1>
         </section>
 
-        <section class="slide">
-            <h2>Front-end challenges</h2>
-            * Strategies for language selection
-            * URL structure (django-localeurl)
-            * HTTP language negotiation
-            * CSS and HTML strategies
-            * Dealing with mixed LTR and RTL content
+        <section class="slide" id="language-policies">
+            <h2>Language Policies</h2>
+
+            <ul>
+                <li>Who chooses which languages are supported?</li>
+                <li>
+                    How does language affect with your concept of “things” on
+                    the site?
+                </li>
+                <li>
+                    How does language affect your URL structure?
+
+                    <div class="slide">
+                        <p>
+                             Django makes it easy to treat translation as a
+                             user preference using the
+                             <a href="https://docs.djangoproject.com/en/dev/topics/i18n/translation/#the-set-language-redirect-view">set_language() view</a>
+                             and as of 1.4
+                             <a href="https://docs.djangoproject.com/en/dev/topics/i18n/translation/#django.conf.urls.i18n.i18n_patterns">i18n_patterns()</a>
+
+                             makes it easy to treat the first path component as
+                             the language - which avoids the need for cookies
+                             and works quite well with CDNs, spiders, etc. -
+                             and to translate URL components as well (e.g.
+                             <samp>/en/news/…</samp>,
+                             <samp>/es/noticias/…</samp>)
+                        </p>
+
+                        <aside>
+                            If you're using Django 1.3 or earlier, Joost Cassee's
+                            <a href="http://pypi.python.org/pypi/django-localeurl">django-localeurl</a>
+                            offers the same locale URL prefixing
+                        </aside>
+
+                        <table>
+                            <caption>Which seems cleaner?</caption>
+                            <tr>
+                                <td><samp>/conference/djangocon-us/2012/</samp></td>
+                                <td><samp>/gr/conference/djangocon-us/2012/</samp></td>
+                            </tr>
+                            <tr>
+                                <td><samp>/wiki/MyCoolIdea</samp></td>
+                                <td><samp>/en/wiki/MyCoolIdea</samp></td>
+                            </tr>
+                            <tr>
+                                <td><samp>/user/jrandom/</samp></td>
+                                <td><samp>/pt/user/jrandom/</samp></td>
+                            </tr>
+                            <tr>
+                                <td><samp>/settings/</samp></td>
+                                <td><samp>/ru/setttings/</samp></td>
+                            </tr>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="slide" id="authoring-policies">
+            <h2>Authoring Policies</h2>
+
+            <ul>
+                <li>Who's creating your content?</li>
+                <li>Does anyone else translate it into other languages?</li>
+                <li>Does anyone review it?
+
+                    <blockquote class="slide long" cite="http://nakedsecurity.sophos.com/2011/01/30/facebook-hacked-in-france-to-insult-someones-little-brother/">
+                        <b>Facebook hacked in France to insult someone's little brother</b>
+
+                        <p>
+                            When setting your language to French and choosing
+                            the option <q lang="fr">Signaler/bloquer cette personne</q>
+                            (<q>Report/Block this person</q> in English) you are
+                            confronted by a rather strange option.
+                        </p>
+                        <p>
+                            In English, you will see choices such as <q>Fake
+                            profile</q>, <q>Inappropriate profile info</q> and
+                            <q>Inappropriate wall post</q>. But on the French
+                            site, the last mentioned option now says, in what
+                            reads like schoolboy French of an English speaker:
+                            <q lang="fr">En discution instantané, Le petit
+                            frère de Dylan Zéroosiix m’a insulter</q>. (<q>In
+                            instant messenger the little brother of Dylan
+                            Zéroosiix insulted me</q>)
+                        </p>
+                    </blockquote>
+                </li>
+            </ul>
         </section>
 
         <section class="slide exit">
