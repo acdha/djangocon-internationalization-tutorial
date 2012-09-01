@@ -79,6 +79,19 @@
                 u&#x27;I \u263a Unicode&#x27;
             </samp>
 
+            <p>
+                It also “works” if you simply avoid treating bytes as text until
+                you're prepared to deal with them. This was a problem in
+                django-localeurl when requests were received with incorrectly
+                encoded data - the rest of the system handled it but the
+                redirect logic would choke on a <code>UnicodeDecodeError</code>.
+
+                This was fixed by
+
+                <a href="https://bitbucket.org/carljm/django-localeurl/changeset/32afa6f7e79db683ee32c4c3389ebc872db57c6c">
+                    doing less
+                </a>
+            </p>
         </section>
 
         <section class="slide" id="unicode-in-python3">
