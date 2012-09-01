@@ -58,6 +58,11 @@ body, .deck-container {
     text-align: right;
 }
 
+.slide nav li {
+    list-style-position: inside;
+    list-style-type: square;
+}
+
 .slide ul.inline {
     margin: 0;
     padding: 0;
