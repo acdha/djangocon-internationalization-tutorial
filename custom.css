@@ -241,6 +241,17 @@ q[cite]:after {
     font-style: oblique;
 }
 
+.slide.deck-current.exit nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 50%;
+
+    text-align: center;
+
+    font-size: larger;
+}
+
 @media print {
     @page {
         size: landscape;
