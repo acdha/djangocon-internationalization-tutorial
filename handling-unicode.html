@@ -437,6 +437,42 @@
             </p>
         </section>
 
+        <section class="slide" id="homoglyph-attacks">
+            <h2>Unicode Security: Homoglyph Attacks</h2>
+
+            <p>
+                Unicode has a number of characters which need to be different
+                for some reason but are visually quite similar. This is most
+                concerning in the case of domain names if an
+
+                <a href="http://en.wikipedia.org/wiki/IDN_homograph_attack">IDN homograph attack</a>
+
+                allows an attacker to register something like
+
+                <samp>http://www.p<abbr title="CYRILLIC SMALL LETTER A">а</abbr>ypal.com/</samp>
+
+                but the concern applies any time there's something to gain from
+                spoofing.
+            </p>
+            <p>
+                Solving this requires some combination of restricting your data
+                or alerting the user:
+
+                <ul>
+                    <li>
+                        Browsers increasingly restrict mixed script display: Chrome
+                        displays the above URL as
+                        <samp>http://www.xn--pypal-4ve.com/</samp> because it mixes
+                        Cyrillic and latin characters
+                    </li>
+                    <li>
+                        Twitter simply blocks non-ASCII usernames:
+                        <img src="img/twitter-homoglyphs.png" alt="Blocked attempt to register @[CYRILLIC SMALL LETTER A]cdha on Twitter">
+                    </li>
+                </ul>
+            </p>
+        </section>
+
         <section class="slide exit">
             <nav>
                 <a href="index.html#agenda">Back to agenda</a>
