@@ -21,6 +21,8 @@ body, .deck-container {
     font-weight: 600;
 }
 
+.slide img {
+    margin: .5em auto;
 }
 
 .slide aside {
