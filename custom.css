@@ -12,6 +12,10 @@ body, .deck-container {
 .deck-container pre, .deck-container code, .deck-container kbd, .deck-container samp {
     font-family: "Ubuntu Mono", monospace;
 }
+
+.deck-container .slide a code {
+    color: inherit;
+    text-decoration: inherit;
 }
 
 .slide h1 {
