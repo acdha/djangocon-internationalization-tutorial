@@ -333,6 +333,13 @@
                         same names
                     </li>
                 </ul>
+                <aside class="slide collapse-inactive">
+                    The default <a href="https://docs.djangoproject.com/en/1.4/ref/templates/builtins/#slugify">slugify</a>
+                    filter simply drops Unicode characters, which is useless
+                    for significantly non-ASCII names. Fortunately, the fine
+                    developers at Mozilla have written a drop-in replacement:
+                    <a href="http://pypi.python.org/pypi/unicode-slugify">unicode-slugify</a>
+                </p>
             </div>
 
             <p class="note slide">
