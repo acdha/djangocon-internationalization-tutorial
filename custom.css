@@ -254,10 +254,6 @@ blockquote[cite]:after {
     text-align: right;
 }
 
-q[cite]:after {
-    content: " (" attr(cite) ")";
-}
-
 .deck-container blockquote q {
     font-style: oblique;
 }
@@ -289,5 +285,9 @@ q[cite]:after {
 
     a:after {
         content: " (" attr(href) ") ";
+    }
+
+    q[cite]:after {
+        content: close-quote " (" attr(cite) ")";
     }
 }
