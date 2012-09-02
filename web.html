@@ -29,13 +29,281 @@
             <h1>Front-End Web Strategies</h1>
         </section>
 
-        <section class="slide">
-            <h2>Front-end challenges</h2>
-            * Strategies for language selection
-            * URL structure (django-localeurl)
-            * HTTP language negotiation
-            * CSS and HTML strategies
-            * Dealing with mixed LTR and RTL content
+        <section id="language-declaration" class="slide">
+            <h2>Specifying language information</h2>
+
+            <figure class="center-block">
+                <figcaption class="center">
+                    <h3>How HTTP &amp; HTML specify language</h3>
+                </figcaption>
+                <ol>
+                    <li>
+                        HTTP <code>Content-Language</code> header
+                    </li>
+                    <li>
+                        HTML <code>&lt;meta&gt;</code> equivalent
+                    </li>
+                    <li>
+                        An HTML
+                        <a href="http://www.w3.org/TR/html4/struct/dirlang.html#h-8.1"><code>lang</code></a>
+                        attribute defined on a parent
+                    </li>
+                    <li>A <code>lang</code> attribute on the element</li>
+                </ol>
+                <figcaption class="center">
+                    (least to most specific)
+                </figcaption>
+            </figure>
+
+            <p>
+                Recommendation: specify the primary language in the
+                <code>lang</code> attribute on your <code>&lt;html&gt;</code>
+                element and where it changes:
+            </p>
+
+            <code class="block">
+                &lt;html lang=&quot;en&quot;&gt;<br>
+                …<br>
+                &lt;blockquote lang=&quot;la&quot;&gt;Lorem ipsum dolor sit amet…&lt;/blockquote&gt;<br>
+            </code>
+
+            <aside>
+                <code>lang</code> values follow
+                <a href="http://www.ietf.org/rfc/rfc1766.txt">RFC 1766</a>.
+
+                Heavily summarized: a primary value, optionally with a
+                hyphen-separated secondary value. Values are most commonly
+                <a href="http://www.loc.gov/standards/iso639-2/">ISO 639 two-letter codes</a>
+                (e.g. Chinese is <samp>zh</samp>) but may also be
+                <samp>i-</samp> prefixed for official languages without
+                ISO639-2 values (e.g. <samp>i-cherokee</samp>) or
+                <samp>x-</samp> prefixed for non-standard private values (e.g.
+                <samp>x-klingon</samp>)
+            </aside>
+        </section>
+
+        <section id="css-lang" class="slide">
+            <h2>Applying per-language styles</h2>
+
+            <p>
+                CSS specifies the
+                <a href="https://developer.mozilla.org/en-US/docs/CSS/:lang">
+                    <code>:lang</code>
+                </a>
+
+                pseudo-selector which allows your stylesheets to target specific
+                languages:
+            </p>
+
+            <code class="block">:lang(zh) { font-family: "Sim Sun"; }</code>
+
+            <p>
+                This is better than the older class or attribute selector
+                approach which we had to use when Internet Explorer prior to 8
+                was dominant:
+            </p>
+
+            <code class="block">[lang=zh] { font-family: "Sim Sun"; }</code>
+
+            <p>
+                <code>:lang()</code> uses the HTML hierarchy and falls back to
+                the base language, making it much easier to style complex HTML
+                like this without having to carefuly adjust your selectors'
+                specificity:
+            </p>
+
+            <code class="block">
+                &lt;div lang="es"&gt;<br>
+                    El Ejemplo:<br>
+                    &lt;blockquote lang=&quot;en-US&quot;&gt;<br>
+                        &lt;q&gt;My hovercraft is full of eels&lt;/q&gt; is<br>
+                        &lt;q lang=&quot;is&quot;&gt;Svifn&ouml;kkvinn minn er fullur af &aacute;lum&lt;/q&gt; in Icelandic<br>
+                        and &lt;q lang=&quot;zh-yue&quot;&gt;&#x6211;&#x96BB;&#x6C23;&#x588A;&#x8239;&#x88DD;&#x6EFF;&#x6652;&#x9C54;&lt;/q&gt; in Cantonese<br>
+                    &lt;/blockquote&gt;<br>
+                &lt;/div&gt;
+            </code>
+
+        </section>
+
+        <section id="directionality" class="slide">
+            <h2>Dealing with mixed LTR and RTL content</h2>
+
+            <p>
+                Text display can get complicated when you need to mix
+                left-to-right and right-to-left characters.
+                The W3 has a great example:
+            </p>
+            <blockquote class="long" cite="http://www.w3.org/TR/WCAG20-TECHS/H34#H34-examples">
+                <p>
+                    This example shows an Arabic phrase in the middle of an
+                    English sentence. The exclamation point is part of the
+                    Arabic phrase and should appear on its left. Because it
+                    is between an Arabic and Latin character and the
+                    overall paragraph direction is <acronym
+                    title="left-to-right">LTR</acronym>, the bidirectional
+                    algorithm positions the exclamation mark to the right
+                    of the Arabic phrase.
+                </p>
+                <p>
+                    The title is <q lang="ar">مفتاح معايير الويب!</q> in Arabic.
+                </p>
+            </blockquote>
+
+            <div class="slide collapse-inactive">
+                <p>Unicode provides several characters to
+                    <a href="http://unicode.org/reports/tr9/#Directional_Formatting_Codes">control the displayed text direction</a>.
+                    These can be confusing because these characters do not
+                    display visually but it's the best option when you want to
+                    correct a non-HTML field by adding a
+                    <code>LEFT-TO-RIGHT MARK</code> (<code>U+200E</code>)
+                    or <code>RIGHT-TO-LEFT MARK</code> (<code>U+200F</code>)
+                    – in our example above, we can add an RLM after the
+                    exclamation point to tell the text layout engine that it
+                    should be included in the RTL text:
+                </p>
+
+                <samp>
+                    The title is <q lang="ar">مفتاح معايير الويب!‏</q> in Arabic.
+                </samp>
+            </div>
+
+            <div class="slide collapse-inactive">
+                <p>
+                    HTML allows you to specify <code>dir="ltr"</code> or
+                    <code>dir="rtl"</code>. The example above uses this markup:
+                    <code>&lt;q lang=&quot;ar&quot;&gt;</code>; this one uses
+                    <code>&lt;q lang=&quot;ar&quot; dir=&quot;rtl&quot;&gt;</code>:
+                </p>
+
+                <samp>
+                    The title is <q lang="ar" dir="rtl">مفتاح معايير الويب!</q> in Arabic.
+                </samp>
+
+                <p>
+                    HTML also specifies the
+                    <a href="https://developer.mozilla.org/en-US/docs/HTML/Element/bdo"><code>bdo</code></a>
+                    tag which allows you to override direction if you were
+                    otherwise going to add a semantically meaningless
+                    <code>span</code> tag:
+                </p>
+                <samp>
+                    The title is <q lang="ar"><bdo dir="rtl">مفتاح معايير الويب!</bdo></q> in Arabic.
+                </samp>
+            </div>
+
+            <div id="css-unicode-bidi-example" class="slide collapse-inactive">
+                CSS allows you to set
+
+                <a href="https://developer.mozilla.org/en-US/docs/CSS/unicode-bidi">
+                    <code>direction</code>
+                </a>
+
+                and
+
+                <a href="https://developer.mozilla.org/en-US/docs/CSS/unicode-bidi">
+                    <code>unicode-bidi</code>
+                </a>
+
+                which is particularly powerful with the
+
+                <a href="https://developer.mozilla.org/en-US/docs/CSS/:lang">
+                    <code>:lang</code>
+                </a> pseudo-selector:
+
+                <code class="block">
+                    :lang(ar) {
+                        direction: rtl;
+                        unicode-bidi: embed;
+                    }
+                </code>
+
+                <samp>
+                    The title is <q lang="ar" style="unicode-bidi: embed">مفتاح معايير الويب!</q> in Arabic.
+                </samp>
+            </div>
+        </section>
+
+        <section id="webfonts" class="slide">
+            <h2>Web Fonts</h2>
+
+            <p>
+                <a href="https://developer.mozilla.org/en-US/docs/CSS/@font-face">CSS3 @font-face</a>
+                is
+                <a href="http://caniuse.com/#feat=fontface">widely available</a>,
+                and there are now many webfont options available for
+                multi-lingual sites which don't want to use “Arial Unicode MS”
+                for everything. This is particularly powerful because browsers
+                won't download a webfont until it's actually needed and the
+                <a href="http://www.w3.org/TR/2012/WD-css3-fonts-20120823/#unicode-range-desc">unicode-range descriptor</a>
+                allows you to target character ranges to specify fonts for
+                particular languages or override specific characters (e.g.
+                low-quality numbers in a great Chinese font)
+            </p>
+
+            <pre><code>@font-face {
+    font-family: 'syriac_font';
+
+    src: url('../webfont/syriac/syriac-webfont.eot');  #IE fallback
+    src: local('Estrangelo Edessa'),
+         url('../webfont/syriac/syriac-webfont.eot') format('embedded-opentype'),
+         url('../webfont/syriac/syriac-webfont.woff') format('woff');
+
+    unicode-range: U+700-074f;
+}
+body {
+    font-family: sans-serif, 'syriac_font';
+}</code></pre>
+        </section>
+
+
+        <section id="ruby" class="slide">
+            <h2>Ruby</h2>
+
+            <p>
+                Some Asian language have an annotation system for providing
+                pronunciation or other information which is displayed next to
+                the primary text:
+
+                <pre><ruby>攻殻<rp>（</rp><rt>こうかく</rt><rp>）</rp>機動隊<rp>（</rp><rt>きどうたい</rt><rp>）</rp></ruby></pre>
+            </p>
+            <p>
+                Most browsers have <a href="http://caniuse.com/#feat=ruby">some support for ruby</a>
+                but this varies and not all of the
+                <a href="http://www.w3.org/TR/css3-ruby/#ruby-def">CSS3 Ruby</a>
+                spec is available.
+            </p>
+        </section>
+
+        <section id="vertical-text" class="slide">
+            <h2>Vertical Text</h2>
+
+            <p>
+                Some languages should be written vertically rather than
+                horizontally. Support for this on the web has been challenging
+                for a long time – and this is an area where Internet Explorer
+                was years ahead, unfortunately using syntax which is not
+                supported by the draft W3
+                <a href="http://www.w3.org/TR/css3-writing-modes/">CSS Writing Modes Level 3</a>
+                specification.
+            </p>
+            <p>
+                As of September 2012 this is not supported at all by
+                Firefox but <code>writing-mode: vertical-lr</code> works in
+                Safari and Chrome when browser-prefixed. Until support matures,
+                be very careful about relying on this feature.
+            </p>
+
+            <figure class="center-block">
+                <figcaption class="center">
+                    Mongolian text borrowed from a
+                    <a href="http://www.w3.org/International/tests/html-css/vertical-text/results-vertical-text">W3 test</a>
+                </figcaption>
+
+                <blockquote class="long" lang="mn" style="max-height: 40%">
+                    <p>ᠬᠤᠯᠤᠭᠠᠨᠠ  ᠡᠨᠳᠡ ᠡᠨᠡ ᠭ᠋ᠠᠯ ᠴᠢᠷᠢᠭ ᠬᠠᠨ᠎ᠠ</p>
+                    <p>ᠤᠷᠲᠤ    ᠡᠨᠳᠡ ᠡᠨᠡ ᠭ᠋ᠠᠯ ᠴᠢᠷᠢᠭ</p>
+                </blockquote>
+            </figure>
         </section>
 
         <section class="slide exit">
