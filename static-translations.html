@@ -30,10 +30,224 @@
         </section>
 
         <section class="slide">
-            <h2>Static content</h2>
+            <h2>The Basics</h2>
+            <h3>An aggressive summary of the <a href="https://docs.djangoproject.com/en/1.4/topics/i18n/translation/">Django translation documentation</a></h3>
 
-        * Django's built-in support
-        * Tools such as Transifex, Google Translator Toolkit, etc.
+            <p class="slide">
+                Essentially what we're doing is changing every place where our
+                code contains text which is displayed to the user (e.g.
+                <samp>Hello, USER</samp>) to instead ask a translation system
+                for the current language equivalent. Django uses the very common
+                <a href="http://www.gnu.org/software/gettext/">GNU gettext</a>
+                system.
+            </p>
+
+            <ol>
+                <li class="slide">
+                    Change our source code to ask gettext for each string
+
+                    <code class="block">
+                        from django.utils.translation import ugettext as _<br>
+                        print <em>_("Welcome to our site")</em><br>
+                    </code>
+                    <code class="block">
+                        {% load i18n %}<br>
+                        &lt;h1&gt;<em>{% trans &quot;Welcome to our site&quot; %}&lt;</em>/h1&gt;<br>
+                    </code>
+                </li>
+                <li class="slide">
+                    Run <kbd>django-admin.py makemessages -a</kbd>
+                </li>
+                <li class="slide">
+                    Translate the files which makemessages created in your
+                    projects' locale directory
+                </li>
+                <li class="slide">
+                    Run <kbd>django-admin.py compilemessages</kbd>
+                </li>
+            </ol>
+        </section>
+
+        <section class="slide">
+            <h2>The Not-So-Basics</h2>
+            <h3>Templates: trans vs. blocktrans</h3>
+
+            <p>
+                The <code>trans</code> templatetag is shorter but limited to
+                simple string values or entire variables. If you need to
+                include variables inside a string or process your input in any
+                way, use <code>blocktrans</code>. Since the format strings are
+                part of the text sent to translators having obvious variable
+                names can avoid potential confusion.
+            </p>
+
+            <code class="block">
+                {% blocktrans with username=request.user.username %}You're logged in as {{ username }}{% endblocktrans %}
+            </code>
+            <code class="block">
+                {% blocktrans with modification_date=object.updated|date %}Last updated: {{ modification_date }}{% endblocktrans %}
+            </code>
+        </section>
+
+        <section class="slide">
+            <h2>The Not-So-Basics</h2>
+            <h3>Pluralization</h3>
+
+            <p>
+                Proper usage of the language often requires the translator to
+                specify multiple translations based on the number of items
+                being referred to. This is even useful in English for avoiding
+                sloppy forms like <samp>follower(s)</samp>:
+            </p>
+
+            <code class="block">
+                {% blocktrans count followers=user.followers.count %}<br>
+                    You have only one follower.<br>
+                {% plural %}<br>
+                    You have {{ followers }} followers.<br>
+                {% endblocktrans %}<br>
+            </code>
+
+            <p>
+                Gettext has support for translators adding more than one or two
+                translations based on a particular language's rules for
+                <a href="http://www.gnu.org/savannah-checkouts/gnu/gettext/manual/html_node/Translating-plural-forms.html#Translating-plural-forms">plural forms</a>.
+                The syntax is unfriendly but it allows you to correctly handle
+                most languages
+            </p>
+        </section>
+
+        <section class="slide">
+            <h2>The Not-So-Basics</h2>
+            <h3>Context</h3>
+
+            <p>
+                A translator may not be able to tell what a word means without
+                additional context (is <samp>June</samp> a month or a name? Is
+                <samp>object</samp> a complaint or a programming term?). Django
+                exposes the underlying gettext framework support:
+            </p>
+
+            <code class="block">
+                {% trans "Print" context "Type of artwork" %}
+            </code>
+            <code class="block">
+                {% trans "Print" context "Word processor command" %}
+            </code>
+        </section>
+
+        <section id="locales" class="slide">
+            <h2>Format Localization</h2>
+
+            <p>
+                Django's <a href="https://docs.djangoproject.com/en/1.4/topics/i18n/formatting/">format localization</a>
+                support allows you to adjust how dates and numbers are
+                displayed. Enabling <code>L10N = True</code> in your
+                settings will activate this globally but sometimes localization
+                isn't appropriate - perhaps you need to format a number for
+                another program and want to tell Django not to use a thousands
+                separator:
+            </p>
+
+            <code class="block">
+                {% load l10n %}<br>
+
+                {% localize off %}<br>
+                    &lt;div data-id=&quot;{{ obj.pk }}&quot;&gt;<br>
+                {% endlocalize %}<br>
+
+                &lt;div data-id=&quot;{{ obj.pk|unlocalize }}&quot;&gt;<br>
+            </code>
+
+            <p>
+                In other cases, you might want to
+                <a href="https://docs.djangoproject.com/en/1.4/topics/i18n/formatting/#creating-custom-format-files">override Django's
+                default format rules</a>. In one example, we needed to change
+                the way full month names were formatted in Portuguese from
+                <samp lang="pt">20 de Janeiro de 2012</samp> to
+                <samp lang="pt">20 de janeiro de 2012</samp>.
+            </p>
+
+            <p>
+                Django's date formatting codes include both <code>F</code>
+                (long month name, e.g. <samp lang="pt">Janeiro</samp>) and
+                <code>E</code> (
+                <q cite="https://docs.djangoproject.com/en/1.4/ref/templates/builtins/#date">
+                    locale specific alternative representation usually used for
+                    long date representation
+                </q>, e.g. <samp lang="pt">janeiro</samp>) so we simply need to
+                tell Django to use a different <code>DATE_FORMAT</code> for Portuguese.
+
+                This required creating a Python module structure under my
+                project so <samp>locale/pt/formats.py</samp> could set
+                <code>DATE_FORMAT = 'j \d\e E \d\e Y'</code>.
+            </p>
+        </section>
+
+        <section class="slide">
+            <h2>Dealing with translation services</h2>
+
+            <p>
+                By now, your project has a bunch of gettext .po files containing
+                English text which need to be translated. There are a number of
+                commercial translation firms and some community-oriented ones
+                such as <a href="http://transifex.com">Transifex</a> and
+                <a href="http://translate.google.com/toolkit/">Google Translator Toolkit</a>.
+                The right choice will depend on your project, team and budget.
+            </p>
+
+            <p>
+                No matter what you pick, you're effectively sending part of your
+                source code to non-programmers. You'll need to decide how to
+                handle reviews, version control and how to prevent hand-editing
+                mistakes or buggy software from destabilizing your translations.
+                Since gettext will return the original language by default if
+                there is no available translation, you particularly need to
+                regularly review the other supported languages.
+            </p>
+        </section>
+
+        <section id="gettext-utilities" class="slide">
+            <h2>Translation file utilities</h2>
+
+            <p>
+                Gettext provides a number of
+                <a href="http://www.gnu.org/software/gettext/manual/html_node/Manipulating.html">handy utilities for working with .po files</a>
+                without editing them by hand.
+
+                In particular,
+                <a href="http://www.gnu.org/software/gettext/manual/html_node/msgcat-Invocation.html">msgcat</a>,
+                <a href="http://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html">msgfmt</a> (consistently formats files)
+                and
+                <a href="http://www.gnu.org/software/gettext/manual/html_node/msggrep-Invocation.html">msgrep</a> (structure-aware search)
+                all have cumbersome UIs but will save you hassle in the long run.
+            </p>
+
+            <p>
+                By default, .po files include a comment with the source
+                locations for each msgid and string. This is helpful context in
+                some cases but it has the disadvantage of causing your .po files
+                to be different every time you run <code>makemessages</code>
+                after an unrelated source change which changes the line number
+                of a translated string. Git's textconv feature allows me to
+                run an external program when diff-ing a .po file and the msgcat
+                utility allows me to sort the file and strip the location
+                comments so I can focus on changes to the actual translation
+                strings.
+            </p>
+
+            <p>
+                <a href="https://github.com/acdha/unix_tools/blob/master/etc/gitattributes"><code>~/.gitattributes</code></a>:
+                <code>*.po diff=msgcat</code>
+            </p>
+            <p>
+                <a href="https://github.com/acdha/unix_tools/blob/master/etc/gitconfig#L53-54"><code>~/.gitconfig</code></a>:
+                <code>
+                    [diff "msgcat"]<br>
+                        textconv = msgcat --no-location --sort-output
+                </code>
+            </p>
+
         </section>
 
         <section class="slide exit">
