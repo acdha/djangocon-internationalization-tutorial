@@ -159,41 +159,6 @@
             <h1>Writing</h1>
         </section>
 
-        <section class="slide" id="text-ancient-history">
-            <h2>An Abbreviated History of Machines &amp; Text</h2>
-
-            <p>
-                It's been assumed that there's a unique way to produce each
-                character since the invention of movable type:
-            </p>
-
-            <figure>
-                <blockquote class="long">
-                    <p>When he wished to print, he took an iron frame and set
-                    it on the iron plate. In this he placed the types, set
-                    close together. When the frame was full, the whole made one
-                    solid block of type. He then placed it near the fire to
-                    warm it. When the paste [at the back] was slightly melted,
-                    he took a smooth board and pressed it over the surface, so
-                    that the block of type became as even as a whetstone.</p>
-
-                    <p><em>For each character there were several types, and for
-                    certain common characters there were twenty or more types
-                    each,</em> in order to be prepared for the repetition of
-                    characters on the same page. When the characters were not
-                    in use he had them arranged with paper labels, one label
-                    for each rhyme-group, and kept them in wooden cases.</p>
-                </blockquote>
-                <figcaption>
-                    Description of the ceramic movable type system created by Bi
-                    Sheng (990–1051) from Joseph Needham's <u>Science and
-                    Civilisation in China: Volume 5, Chemistry and Chemical
-                    Technology, Part 1, Paper and Printing</u>, as quoted in
-                    Wikipedia's <a href="http://en.wikipedia.org/wiki/Movable_type#History_of_Movable_type">History of Movable type</a>
-                </figcaption>
-            </figure>
-        </section>
-
         <section class="slide">
             <h2>An Abbreviated History of Electronic Text</h2>
             <p>
@@ -251,6 +216,14 @@
         <section class="slide" id="unicode">
             <h2>Unicode</h2>
 
+            <p>
+                Starting in the 1980s, engineers from various companies started
+                working on an ambitious project: a universal 16-bit character
+                set which could represent every character used in human writing.
+                At some point it expanded beyond 16 bits but the goal hasn't
+                changed
+            </p>
+
             <figure>
                 <figcaption><a href="http://www.unicode.org/standard/principles.html">The Unicode® Standard: A Technical Introduction</a></figcaption>
                 <blockquote class="long" cite="http://www.unicode.org/standard/principles.html">
@@ -264,7 +237,6 @@
                     alphabets, ideograph sets, and symbol collections.</p>
                 </blockquote>
             </figure>
-
         </section>
 
         <section class="slide terminology" id="terminology-unicode">
@@ -412,46 +384,46 @@
             <p>Determining how strings compare for the purposes of sorting</p>
 
             <div class="center-block">
-        		<table>
+                <table>
                     <caption>
                         Sample character collation rules
                     </caption>
                     <tr>
                         <th class="section" colspan="2">By Language</th>
                     </tr>
-        			<tr>
-        				<th>Swedish:</th>
-        				<td>z &lt; ö</td>
-        			</tr>
-        			<tr>
-        				<th>German:</th>
-        				<td>ö &lt; z</td>
-        			</tr>
-        			<tr>
-        				<th>German:</th>
-        				<td><abbr title="LATIN SMALL LETTER SHARP S">ß</abbr> = ss</td>
-        			</tr>
+                    <tr>
+                        <th>Swedish:</th>
+                        <td>z &lt; ö</td>
+                    </tr>
+                    <tr>
+                        <th>German:</th>
+                        <td>ö &lt; z</td>
+                    </tr>
+                    <tr>
+                        <th>German:</th>
+                        <td><abbr title="LATIN SMALL LETTER SHARP S">ß</abbr> = ss</td>
+                    </tr>
 
                     <tr>
                         <th class="section" colspan="2">By Context</th>
                     </tr>
-        			<tr>
-        				<th>French:</th>
-        				<td>cote &lt; côte &lt; coté &lt; côté</td>
-        			</tr>
+                    <tr>
+                        <th>French:</th>
+                        <td>cote &lt; côte &lt; coté &lt; côté</td>
+                    </tr>
 
                     <tr>
                         <th class="section" colspan="2">By Usage</th>
                     </tr>
-        			<tr>
-        				<th>German Dictionary:</th>
-        				<td>of &lt; öf</td>
-        			</tr>
-        			<tr>
-        				<th>German Telephone:</th>
-        				<td>öf &lt; of</td>
-        			</tr>
-        		</table>
+                    <tr>
+                        <th>German Dictionary:</th>
+                        <td>of &lt; öf</td>
+                    </tr>
+                    <tr>
+                        <th>German Telephone:</th>
+                        <td>öf &lt; of</td>
+                    </tr>
+                </table>
 
                 <p class="attribution">
                     Sources: <cite><a href="http://unicode.org/reports/tr10/">Unicode Technical Standard #10</a></cite>
@@ -530,7 +502,6 @@
                     </p>
                 </li>
             </ul>
-            <p class="larger center">Summary: <strong>use Unicode!</strong></p>
         </section>
 
         <section class="slide" id="complex-scripts">
