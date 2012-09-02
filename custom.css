@@ -267,8 +267,8 @@ blockquote[cite]:after {
     color: black;
 }
 
-.slide.deck-current.exit nav {
-    position: fixed;
+.slide.exit nav {
+    position: absolute;
     left: 0;
     right: 0;
     top: 50%;
