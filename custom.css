@@ -4,6 +4,13 @@
     direction: rtl;
 }
 
+:lang(mn) {
+    writing-mode: tb-lr;
+    -webkit-writing-mode: vertical-lr;
+    -moz-writing-mode: vertical-lr;
+    writing-mode: vertical-lr;
+}
+
 body, .deck-container {
     font-family: 'Source Sans Pro', "Helvetica Neue", sans-serif;
     text-rendering: optimizeLegibility;
