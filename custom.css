@@ -266,6 +266,11 @@ q[cite]:after {
     font-style: normal;
 }
 
+.deck-container code em {
+    font-style: normal;
+    color: black;
+}
+
 .slide.deck-current.exit nav {
     position: fixed;
     left: 0;
