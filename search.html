@@ -29,12 +29,78 @@
             <h1>Multilingual Search</h1>
         </section>
 
+        <section class="slide">
+            <h2>Search Challenges</h2>
+
+            <ul>
+                <li>
+                    Careful review is needed for result quality in multiple
+                    languages
+                </li>
+                <li>
+                    All Lucene-based engines, including Solr and ElasticSearch,
+                    cannot handle single documents containing text in multiple
+                    languages
+                </li>
+                <li>
+                    Regular, preferably automated, testing is a good idea to
+                    avoiding regressions, particularly if you're using any
+                    language-specific customizations for stemming, synonyms,
+                    etc.
+                </li>
+            </ul>
+        </section>
 
         <section class="slide">
-            <h2>Search</h2>
-            * Multi-lingual search
-            * Solr strategies
-            * django-haystack challenges
+            <h2>Searching with Solr</h2>
+
+            <p>
+                As with databases, we have to decide whether it's better to
+                store all of your content in a single Solr index with
+                language-specific fields or to use a separate cores for each
+                language. Because Solr likes to have a single document field
+                and to avoid needing to manage sets of per-language translated
+                field names in queries, I generally recommend the latter
+                approach, especially if your data is not synchronized across
+                languages.
+            </p>
+
+            <p>
+                The Solr example schema lists reasonable defaults for most
+                languages. You should plan to have a native speaker review your
+                results once you have realistic test data available.
+            </p>
+        </section>
+
+        <section class="slide">
+            <h2>Using django-haystack</h2>
+
+            <p class="note">
+                Haystack 1.x only supports a single Solr backend, which
+                requires some work to use multiple cores. When version 2.0 is
+                stable, this will mostly become a simple
+                <code>.using(lang)</code> call.
+            </p>
+
+            <ol>
+                <li>
+                    search_sites.py: load multiple backends, one per language
+                </li>
+                <li>
+                    search_indexes.py: configure get_queryset() to filter on
+                    language when indexing
+                </li>
+                <li>
+                    Change all views to retrieve the language-specific backend
+                    rather than simply calling <code>SearchQuerySet()</code>
+                </li>
+                <li>
+                    Create your own <code>update_index</code> and
+                    <code>clear_index</code> management commands which use the
+                    language-specific backends and filter database queries
+                    accordingly
+                </li>
+            </ol>
         </section>
 
         <section class="slide exit">
