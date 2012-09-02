@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+        <meta name="viewport" content="width=1024, user-scalable=no">
+
+        <title>Building Global Websites: Dealing with Dynamic Content</title>
+
+        <!-- Required stylesheet -->
+        <link rel="stylesheet" href="deck.js/core/deck.core.css">
+
+
+        <link rel="stylesheet" href="deck.js/extensions/goto/deck.goto.css">
+        <link rel="stylesheet" href="deck.js/extensions/menu/deck.menu.css">
+        <link rel="stylesheet" href="deck.js/extensions/navigation/deck.navigation.css">
+        <link rel="stylesheet" href="deck.js/extensions/status/deck.status.css">
+        <link rel="stylesheet" href="deck.js/extensions/hash/deck.hash.css">
+
+        <link rel="stylesheet" href="deck.js/themes/style/swiss.css">
+
+        <link rel="stylesheet" href="custom.css">
+
+        <script src="deck.js/modernizr.custom.js"></script>
+    </head>
+
+    <body class="deck-container">
+        <section class="slide" id="intro">
+            <h1>Dealing with Model Content</h1>
+        </section>
+
+        <section class="slide">
+            <h2>Strategies</h2>
+
+            <p>
+                As we discussed in the
+                <a href="design.html#language-policies">design decisions</a>
+                one key challenge for our model design is the question of how
+                language interacts with our concept of an object: do we have
+                abstract entities with associated translations, text which only
+                exists in one language or some combination of the two? Do I
+                support only a small number of pre-defined languages or
+                anything which someone on the internet felt like contributing?
+            </p>
+
+            <div class="slide">
+                This has implications for our database design:
+                <ol>
+                    <li>
+                        Each object has a language code and no direct links
+                        across languages
+                    </li>
+                    <li>
+                        Each object has separate fields for each language
+                    </li>
+                    <li>
+                        Each object which defines language-neutral properties
+                        (e.g. a <code>City</code> has a country and and a
+                        GeoDjango shape) and uses related objects for
+                        translation
+                    </li>
+                </ol>
+
+                <p>
+                    Any of these could be correct depending on the project.
+                    We'll look at two Django apps which help manage the second
+                    and third possibilities
+                </p>
+            </div>
+        </section>
+
+        <section class="slide">
+            <h2>django-modeltranslation</h2>
+
+            <ul>
+                <li>
+                    Simple <a href="http://code.google.com/p/django-modeltranslation/wiki/InstallationAndUsage">installation and usage</a>:
+                    simply register the models and fields which you want to translate.
+                </li>
+                <li>
+                    All translations are stored in the same table: the
+                    <code>title</code> field will become <code>title_en</code>,
+                    <code>title_de</code>, etc.
+                </li>
+                <li>
+                    Model access is based on the active translation:
+                    <code>obj.title</code> becomes a property which returns
+                    <code>title_<i>LANGUAGE_CODE</i></code>.
+                </li>
+               <li>
+                   Full integration in the Django admin
+              </li>
+            </ul>
+            <p>
+                This is avoids adding any extra tables or performing extra
+                queries but it will retrieve considerable extra data if you have
+                more than a few languages or very much text. You can compensate
+                partially using Django's
+                <a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/#defer">defer()</a>,
+                <a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/#only">only</a>
+                <a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/#values">values</a>
+                or <a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/#values_list">values_list</a>
+                queryset methods to retrieve only the fields you care about at
+                the cost of having to code some language-specific queries.
+            </p>
+        </section>
+
+        <section class="slide">
+            <h2>django-hvad</h2>
+
+            <ul>
+                <li>
+                    Provides a <code>TranslatableModel</code> class which your
+                    models should subclass. Untranslated fields are declared
+                    normally; translated fields are declared using a
+                    <code>TranslatedFields</code> helper
+                </li>
+                <li>
+                    Translated fields are stored in a separate table; the
+                    <code>TranslationQueryset</code> provides a
+                    <code>language()</code> method which will automatically
+                    populate the fields of a retrieved object with the desired
+                    language, optionally falling back to other languages when
+                    a particular translation doesn't exist
+                </li>
+               <li>
+                   Full integration in the Django admin
+              </li>
+            </ul>
+            <p>
+                hvad retrieves only the translations you care about and allows
+                you to avoid duplicating the untranslated portion of your model
+                data. On the downside, every query now involves at least an
+                extra JOIN which may be a performance concern, particularly for
+                MySQL users.
+            </p>
+        </section>
+
+        <section class="slide exit">
+            <nav>
+                <a href="index.html#agenda">Back to agenda</a>
+            </nav>
+        </section>
+
+        <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+        <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+        <!-- deck.status snippet -->
+        <p class="deck-status">
+            <span class="deck-status-current"></span>
+            /
+            <span class="deck-status-total"></span>
+        </p>
+
+        <!-- deck.goto snippet -->
+        <form action="." method="get" class="goto-form">
+            <label for="goto-slide">Go to slide:</label>
+            <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+            <datalist id="goto-datalist"></datalist>
+            <input type="submit" value="Go">
+        </form>
+
+        <!-- deck.hash snippet -->
+        <a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+
+        <script src="deck.js/jquery-1.7.2.min.js"></script>
+        <script src="deck.js/core/deck.core.js"></script>
+
+        <script src="deck.js/core/deck.core.js"></script>
+        <script src="deck.js/extensions/hash/deck.hash.js"></script>
+        <script src="deck.js/extensions/menu/deck.menu.js"></script>
+        <script src="deck.js/extensions/goto/deck.goto.js"></script>
+        <script src="deck.js/extensions/status/deck.status.js"></script>
+        <script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+
+        <script>
+            $(function() {
+                $.deck('.slide');
+            });
+        </script>
+    </body>
+</html>
