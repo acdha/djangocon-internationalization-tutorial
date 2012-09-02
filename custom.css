@@ -218,6 +218,11 @@ figure.slide > figcaption {
     quotes: '« ' ' »' '“' '”';
 }
 
+[dir=rtl]:lang(ar),
+#css-unicode-bidi-example q:lang(ar) {
+    quotes: '”' '“' '’' '‘';
+}
+
 .deck-container q:before {
     content: open-quote;
 }
@@ -248,6 +253,10 @@ q[cite]:after {
 
 .deck-container blockquote q {
     font-style: oblique;
+}
+
+.deck-container blockquote :lang(ar) {
+    font-style: normal;
 }
 
 .slide.deck-current.exit nav {
