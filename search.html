@@ -39,8 +39,10 @@
                 </li>
                 <li>
                     All Lucene-based engines, including Solr and ElasticSearch,
-                    cannot handle single documents containing text in multiple
-                    languages
+                    define language at the schema level, preventing you from
+                    having a per-document setting for language. Your document can,     
+                    however, have <code>text_en</code>, <code>text_es</code>, etc.
+                    defined and leave all but the appropriate one null.
                 </li>
                 <li>
                     Regular, preferably automated, testing is a good idea to
