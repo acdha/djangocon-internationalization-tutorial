@@ -7,7 +7,7 @@
 		visibility:visible;
 		cursor:pointer;
 	}
-	
+
 	> .slide {
 		.no-csstransforms & {
 			float:left;
@@ -19,7 +19,7 @@
 			overflow:hidden;
 			padding:0 0.5%;
 		}
-		
+
 		.csstransforms & {
 			-webkit-transform:scale(.22) !important;
 			-moz-transform:scale(.22) !important;
@@ -41,15 +41,15 @@
 			margin:12px;
 		}
 	}
-	
+
 	iframe, img, video {
 		max-width:100%;
 	}
-	
+
 	.deck-current, .no-touch & .slide:hover {
 		background:#ddf;
 	}
-	
+
 	&.deck-container:hover {
 		.deck-prev-link, .deck-next-link {
 			display:none;

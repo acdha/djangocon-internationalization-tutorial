@@ -33,7 +33,7 @@
 .csstransitions.csstransforms {
 	.deck-container {
 		overflow-y:hidden;
-		
+
 		> .slide {
 			-webkit-transition:-webkit-transform 500ms ease-in-out;
 			-moz-transition:-moz-transform 500ms ease-in-out;
@@ -42,7 +42,7 @@
 			transition:transform 500ms ease-in-out;
 		}
 	}
-	
+
 	.deck-container:not(.deck-menu) {
 		> .slide {
 			position:absolute;
@@ -53,7 +53,7 @@
 			box-sizing: border-box;
 			width:100%;
 			padding:0 48px;
-			
+
 			.slide {
 				position:relative;
 				left:0;
@@ -86,7 +86,7 @@
 		> .deck-after {
 			@include translate(0, 400%);
 		}
-		
+
 		> .deck-before, > .deck-previous {
 			.slide {
 				visibility:visible;
@@ -97,14 +97,14 @@
 			@include transform(none);
 		}
 	}
-	
+
 	.deck-prev-link {
 		left:auto;
 		right:8px;
 		top:59px;
 		@include rotate(90deg);
 	}
-	
+
 	.deck-next-link {
 		top:99px;
 		@include rotate(90deg);
