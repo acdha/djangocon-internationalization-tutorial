@@ -287,10 +287,14 @@ body {
                 specification.
             </p>
             <p>
-                As of September 2012 this is not supported at all by
-                Firefox but <code>writing-mode: vertical-lr</code> works in
-                Safari and Chrome when browser-prefixed. Until support matures,
-                be very careful about relying on this feature.
+                This is not supported by Firefox prior to version 41 but
+                <code>writing-mode: vertical-lr</code> works in Safari and Chrome when browser-prefixed.
+                Internet Explorer 9+ supports
+                <a href="https://msdn.microsoft.com/library/ms531187%28v=vs.85%29.aspx">
+                    <code>-ms-writing-mode</code>
+                </a> with different values.
+
+                Be very careful about relying on this feature.
             </p>
 
             <figure class="center-block">
