@@ -36,12 +36,16 @@
   padding: 0 48px;
   margin: 12px;
 }
-.deck-menu iframe, .deck-menu img, .deck-menu video {
+.deck-menu iframe,
+.deck-menu img,
+.deck-menu video {
   max-width: 100%;
 }
-.deck-menu .deck-current, .no-touch .deck-menu .slide:hover {
+.deck-menu .deck-current,
+.no-touch .deck-menu .slide:hover {
   background: #ddf;
 }
-.deck-menu.deck-container:hover .deck-prev-link, .deck-menu.deck-container:hover .deck-next-link {
+.deck-menu.deck-container:hover .deck-prev-link,
+.deck-menu.deck-container:hover .deck-next-link {
   display: none;
 }

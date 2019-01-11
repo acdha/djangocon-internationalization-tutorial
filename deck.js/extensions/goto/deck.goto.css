@@ -19,7 +19,8 @@
 .deck-container .goto-form label {
   font-weight: bold;
 }
-.deck-container .goto-form label, .deck-container .goto-form input {
+.deck-container .goto-form label,
+.deck-container .goto-form input {
   display: inline-block;
   font-family: inherit;
 }
@@ -35,7 +36,8 @@
 }
 
 @media print {
-  .goto-form, #goto-slide {
+  .goto-form,
+  #goto-slide {
     display: none !important;
   }
 }

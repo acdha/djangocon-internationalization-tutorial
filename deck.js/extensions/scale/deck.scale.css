@@ -11,7 +11,10 @@ using the scale extension. */
   width: 100%;
   padding-bottom: 20px;
 }
-.csstransforms .deck-container.deck-scale:not(.deck-menu) > .slide > .deck-slide-scaler {
+.csstransforms
+  .deck-container.deck-scale:not(.deck-menu)
+  > .slide
+  > .deck-slide-scaler {
   -webkit-transform-origin: 50% 0;
   -moz-transform-origin: 50% 0;
   -o-transform-origin: 50% 0;

@@ -13,9 +13,9 @@ accordingly). The form-showing state is indicated by the presence of a class on
 the deck container.
 */
 (function($, deck, undefined) {
-	var $d = $(document);
+  var $d = $(document);
 
-	/*
+  /*
 	Extends defaults/options.
 
 	options.classes.goto
@@ -44,127 +44,135 @@ the deck container.
 		If false, only top level slides will be counted when entering a
 		slide number.
 	*/
-	$.extend(true, $[deck].defaults, {
-		classes: {
-			goto: 'deck-goto'
-		},
+  $.extend(true, $[deck].defaults, {
+    classes: {
+      goto: "deck-goto"
+    },
 
-		selectors: {
-			gotoDatalist: '#goto-datalist',
-			gotoForm: '.goto-form',
-			gotoInput: '#goto-slide'
-		},
+    selectors: {
+      gotoDatalist: "#goto-datalist",
+      gotoForm: ".goto-form",
+      gotoInput: "#goto-slide"
+    },
 
-		keys: {
-			goto: 71 // g
-		},
+    keys: {
+      goto: 71 // g
+    },
 
-		countNested: true
-	});
+    countNested: true
+  });
 
-	/*
+  /*
 	jQuery.deck('showGoTo')
 
 	Shows the Go To Slide form by adding the class specified by the goto class
 	option to the deck container.
 	*/
-	$[deck]('extend', 'showGoTo', function() {
-		$[deck]('getContainer').addClass($[deck]('getOptions').classes.goto);
-		$($[deck]('getOptions').selectors.gotoInput).focus();
-	});
+  $[deck]("extend", "showGoTo", function() {
+    $[deck]("getContainer").addClass($[deck]("getOptions").classes.goto);
+    $($[deck]("getOptions").selectors.gotoInput).focus();
+  });
 
-	/*
+  /*
 	jQuery.deck('hideGoTo')
 
 	Hides the Go To Slide form by removing the class specified by the goto class
 	option from the deck container.
 	*/
-	$[deck]('extend', 'hideGoTo', function() {
-		$($[deck]('getOptions').selectors.gotoInput).blur();
-		$[deck]('getContainer').removeClass($[deck]('getOptions').classes.goto);
-	});
+  $[deck]("extend", "hideGoTo", function() {
+    $($[deck]("getOptions").selectors.gotoInput).blur();
+    $[deck]("getContainer").removeClass($[deck]("getOptions").classes.goto);
+  });
 
-	/*
+  /*
 	jQuery.deck('toggleGoTo')
 
 	Toggles between showing and hiding the Go To Slide form.
 	*/
-	$[deck]('extend', 'toggleGoTo', function() {
-		$[deck]($[deck]('getContainer').hasClass($[deck]('getOptions').classes.goto) ? 'hideGoTo' : 'showGoTo');
-	});
+  $[deck]("extend", "toggleGoTo", function() {
+    $[deck](
+      $[deck]("getContainer").hasClass($[deck]("getOptions").classes.goto)
+        ? "hideGoTo"
+        : "showGoTo"
+    );
+  });
 
-	$d.bind('deck.init', function() {
-		var opts = $[deck]('getOptions'),
-		$datalist = $(opts.selectors.gotoDatalist),
-		slideTest = $.map([
-			opts.classes.before,
-			opts.classes.previous,
-			opts.classes.current,
-			opts.classes.next,
-			opts.classes.after
-		], function(el, i) {
-			return '.' + el;
-		}).join(', '),
-		rootCounter = 1;
+  $d.bind("deck.init", function() {
+    var opts = $[deck]("getOptions"),
+      $datalist = $(opts.selectors.gotoDatalist),
+      slideTest = $.map(
+        [
+          opts.classes.before,
+          opts.classes.previous,
+          opts.classes.current,
+          opts.classes.next,
+          opts.classes.after
+        ],
+        function(el, i) {
+          return "." + el;
+        }
+      ).join(", "),
+      rootCounter = 1;
 
-		// Bind key events
-		$d.unbind('keydown.deckgoto').bind('keydown.deckgoto', function(e) {
-			var key = $[deck]('getOptions').keys.goto;
+    // Bind key events
+    $d.unbind("keydown.deckgoto").bind("keydown.deckgoto", function(e) {
+      var key = $[deck]("getOptions").keys.goto;
 
-			if (e.which === key || $.inArray(e.which, key) > -1) {
-				e.preventDefault();
-				$[deck]('toggleGoTo');
-			}
-		});
+      if (e.which === key || $.inArray(e.which, key) > -1) {
+        e.preventDefault();
+        $[deck]("toggleGoTo");
+      }
+    });
 
-		/* Populate datalist and work out countNested*/
-		$.each($[deck]('getSlides'), function(i, $slide) {
-			var id = $slide.attr('id'),
-			$parentSlides = $slide.parentsUntil(opts.selectors.container, slideTest);
+    /* Populate datalist and work out countNested*/
+    $.each($[deck]("getSlides"), function(i, $slide) {
+      var id = $slide.attr("id"),
+        $parentSlides = $slide.parentsUntil(
+          opts.selectors.container,
+          slideTest
+        );
 
-			if (id) {
-				$datalist.append('<option value="' + id + '">');
-			}
+      if (id) {
+        $datalist.append('<option value="' + id + '">');
+      }
 
-			if ($parentSlides.length) {
-				$slide.removeData('rootIndex');
-			}
-			else if (!opts.countNested) {
-				$slide.data('rootIndex', rootCounter);
-				++rootCounter;
-			}
-		});
+      if ($parentSlides.length) {
+        $slide.removeData("rootIndex");
+      } else if (!opts.countNested) {
+        $slide.data("rootIndex", rootCounter);
+        ++rootCounter;
+      }
+    });
 
-		// Process form submittal, go to the slide entered
-		$(opts.selectors.gotoForm)
-		.unbind('submit.deckgoto')
-		.bind('submit.deckgoto', function(e) {
-			var $field = $($[deck]('getOptions').selectors.gotoInput),
-			ndx = parseInt($field.val(), 10);
+    // Process form submittal, go to the slide entered
+    $(opts.selectors.gotoForm)
+      .unbind("submit.deckgoto")
+      .bind("submit.deckgoto", function(e) {
+        var $field = $($[deck]("getOptions").selectors.gotoInput),
+          ndx = parseInt($field.val(), 10);
 
-			if (!$[deck]('getOptions').countNested) {
-			  if (ndx >= rootCounter) return false;
-				$.each($[deck]('getSlides'), function(i, $slide) {
-					if ($slide.data('rootIndex') === ndx) {
-						ndx = i + 1;
-						return false;
-					}
-				});
-			}
+        if (!$[deck]("getOptions").countNested) {
+          if (ndx >= rootCounter) return false;
+          $.each($[deck]("getSlides"), function(i, $slide) {
+            if ($slide.data("rootIndex") === ndx) {
+              ndx = i + 1;
+              return false;
+            }
+          });
+        }
 
-			$[deck]('go', isNaN(ndx) ? $field.val() : ndx - 1);
-			$[deck]('hideGoTo');
-			$field.val('');
+        $[deck]("go", isNaN(ndx) ? $field.val() : ndx - 1);
+        $[deck]("hideGoTo");
+        $field.val("");
 
-			e.preventDefault();
-		});
+        e.preventDefault();
+      });
 
-		// Dont let keys in the input trigger deck actions
-		$(opts.selectors.gotoInput)
-		.unbind('keydown.deckgoto')
-		.bind('keydown.deckgoto', function(e) {
-			e.stopPropagation();
-		});
-	});
-})(jQuery, 'deck');
-
+    // Dont let keys in the input trigger deck actions
+    $(opts.selectors.gotoInput)
+      .unbind("keydown.deckgoto")
+      .bind("keydown.deckgoto", function(e) {
+        e.stopPropagation();
+      });
+  });
+})(jQuery, "deck");
