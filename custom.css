@@ -1,293 +1,305 @@
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,600,700|Ubuntu+Mono&subset=latin,latin-ext);
+@import url(
+  http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,
+  400italic,
+  600,
+  700|Ubuntu+Mono&subset=latin,
+  latin-ext
+);
 
 :lang(ar) {
-    direction: rtl;
+  direction: rtl;
 }
 
 :lang(mn) {
-    writing-mode: tb-lr;
-    -webkit-writing-mode: vertical-lr;
-    -moz-writing-mode: vertical-lr;
-    writing-mode: vertical-lr;
+  writing-mode: tb-lr;
+  -webkit-writing-mode: vertical-lr;
+  -moz-writing-mode: vertical-lr;
+  writing-mode: vertical-lr;
 }
 
-body, .deck-container {
-    font-family: 'Source Sans Pro', "Helvetica Neue", sans-serif;
-    text-rendering: optimizeLegibility;
+body,
+.deck-container {
+  font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
-.deck-container pre, .deck-container code, .deck-container kbd, .deck-container samp {
-    font-family: "Ubuntu Mono", monospace;
+.deck-container pre,
+.deck-container code,
+.deck-container kbd,
+.deck-container samp {
+  font-family: "Ubuntu Mono", monospace;
 }
 
 .deck-container .slide a code {
-    color: inherit;
-    text-decoration: inherit;
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .slide h1 {
-    font-weight: 700;
+  font-weight: 700;
 }
 
-.slide h2, .slide h3 {
-    font-weight: 600;
+.slide h2,
+.slide h3 {
+  font-weight: 600;
 }
 
 .slide img {
-    margin: .5em auto;
+  margin: 0.5em auto;
 }
 
 .slide aside {
-    margin: .6em;
-    margin-left: 3em;
-    padding: .5em;
+  margin: 0.6em;
+  margin-left: 3em;
+  padding: 0.5em;
 
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
 
-    border: dotted #ddd 1px;
-    border-left-style: solid;
-    border-left-width: .5em;
+  border: dotted #ddd 1px;
+  border-left-style: solid;
+  border-left-width: 0.5em;
 
-    background-color: #eee;
+  background-color: #eee;
 
-    font-size: smaller;
+  font-size: smaller;
 }
 
 .slide .bottom {
-    position: absolute;
-    z-index: 3;
-    top: 92%;
-    width: 100%;
-    background-color: transparent;
+  position: absolute;
+  z-index: 3;
+  top: 92%;
+  width: 100%;
+  background-color: transparent;
 }
 
 .slide .center {
-    text-align: center;
+  text-align: center;
 }
 
 .slide .center-block {
-    width: 70%;
-    margin: 0 auto;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .slide .align-right {
-    text-align: right;
+  text-align: right;
 }
 
 .slide nav li {
-    list-style-position: inside;
-    list-style-type: square;
+  list-style-position: inside;
+  list-style-type: square;
 }
 
 .slide ul.inline {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .slide .inline > li {
-    display: inline-block;
+  display: inline-block;
 }
 
 .slide .inline > li + li:before {
-    content: "✦ ";
+  content: "✦ ";
 }
 
 .slide .larger {
-    font-size: 300%;
+  font-size: 300%;
 }
 
 .slide .attribution {
-    font-size: smaller;
+  font-size: smaller;
 }
 
 .center-block table {
-    margin: auto;
-    width: 100%;
+  margin: auto;
+  width: 100%;
 }
 
 .slide .mistake {
-    color: red;
+  color: red;
 }
 
 .slide figure img {
-    max-width: 80%;
-    max-height: 65%;
+  max-width: 80%;
+  max-height: 65%;
 }
 
 .deck-container .slide p,
 .deck-container .slide blockquote p {
-    margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .slide i {
-    font-style: italic;
+  font-style: italic;
 }
 
 .slide b {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-.slide samp.block, .slide code.block {
-    display: block;
+.slide samp.block,
+.slide code.block {
+  display: block;
 
-    margin: 4pt 2pt;
-    margin-bottom: 6pt;
+  margin: 4pt 2pt;
+  margin-bottom: 6pt;
 
-    padding: 2px 4px;
+  padding: 2px 4px;
 
-    border: solid #ccc 1pt;
-    border-top-style: dotted;
-    border-left-style: dotted;
-    border-bottom-width: 2pt;
-    border-right-width: 2pt;
+  border: solid #ccc 1pt;
+  border-top-style: dotted;
+  border-left-style: dotted;
+  border-bottom-width: 2pt;
+  border-right-width: 2pt;
 
-    font-size: smaller;
-    color: #666;
+  font-size: smaller;
+  color: #666;
 }
 
 .slide aside .block {
-    background-color: #eef;
+  background-color: #eef;
 }
 
 .slide dt {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .slide dd {
-    margin-left: 2em;
-    margin-bottom: 4pt;
-    font-size: smaller;
+  margin-left: 2em;
+  margin-bottom: 4pt;
+  font-size: smaller;
 }
 
 .slide th {
-    text-align: right;
+  text-align: right;
 }
 
 .slide th.section {
-    background-color: #ccc;
-    text-align: center;
+  background-color: #ccc;
+  text-align: center;
 }
 
-.slide td, .slide th {
-    padding: 2pt 1em;
+.slide td,
+.slide th {
+  padding: 2pt 1em;
 }
 
 .slide tr:nth-child(odd) {
-    background-color: #eee;
+  background-color: #eee;
 }
 
 .slide .note {
-    margin: .3em auto;
-    width: 80%;
+  margin: 0.3em auto;
+  width: 80%;
 
-    border: solid yellow 2pt;
-    background-color: rgba(255, 255, 0, 0.3);
+  border: solid yellow 2pt;
+  background-color: rgba(255, 255, 0, 0.3);
 
-    text-align: center;
+  text-align: center;
 }
 
 .slide blockquote.long {
-    font-size: inherit;
-    font-style: inherit;
-    padding: 0 1em;
+  font-size: inherit;
+  font-style: inherit;
+  padding: 0 1em;
 
-    background-color: rgba(255, 255, 128, 0.2);
+  background-color: rgba(255, 255, 128, 0.2);
 }
 
 .slide.deck-previous.collapse-inactive,
 .slide.deck-before.collapse-inactive,
 .slide.deck-previous > p.collapse-inactive,
-.slide.deck-before > p.collapse-inactive
-{
-    display: none;
+.slide.deck-before > p.collapse-inactive {
+  display: none;
 }
 
 .slide figure {
-    margin: 1em 0;
+  margin: 1em 0;
 }
 
 .slide figcaption {
-    width: 90%;
-    margin: .5em auto;
-    font-size: smaller;
+  width: 90%;
+  margin: 0.5em auto;
+  font-size: smaller;
 }
 
 figure.slide > figcaption {
-    font-weight: bold;
-    font-size: inherit;
+  font-weight: bold;
+  font-size: inherit;
 }
 
 .deck-container q {
-    quotes: '“' '”' '‘' '’';
+  quotes: "“" "”" "‘" "’";
 }
 
 .deck-container q:lang(fr) {
-    quotes: '« ' ' »' '“' '”';
+  quotes: "« " " »" "“" "”";
 }
 
-[dir=rtl]:lang(ar),
+[dir="rtl"]:lang(ar),
 #css-unicode-bidi-example q:lang(ar) {
-    quotes: '”' '“' '’' '‘';
+  quotes: "”" "“" "’" "‘";
 }
 
 .deck-container q:before {
-    content: open-quote;
+  content: open-quote;
 }
 
 .deck-container q:after {
-    content: close-quote;
+  content: close-quote;
 }
 
 blockquote[cite]:after,
 q[cite]:after {
-    /* Allow wrapping URLs */
-    white-space: break-word;
+  /* Allow wrapping URLs */
+  white-space: break-word;
 }
 
 blockquote[cite]:after {
-    display: block;
-    content: "Source: " attr(cite);
+  display: block;
+  content: "Source: " attr(cite);
 
-    color: #666;
+  color: #666;
 
-    font-size: smaller;
-    text-align: right;
+  font-size: smaller;
+  text-align: right;
 }
 
 .deck-container blockquote q {
-    font-style: oblique;
+  font-style: oblique;
 }
 
 .deck-container blockquote :lang(ar) {
-    font-style: normal;
+  font-style: normal;
 }
 
 .deck-container code em {
-    font-style: normal;
-    color: black;
+  font-style: normal;
+  color: black;
 }
 
 .slide.exit nav {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
 
-    text-align: center;
+  text-align: center;
 
-    font-size: larger;
+  font-size: larger;
 }
 
 @media print {
-    @page {
-        size: landscape;
-    }
+  @page {
+    size: landscape;
+  }
 
-    a:after {
-        content: " (" attr(href) ") ";
-    }
+  a:after {
+    content: " (" attr(href) ") ";
+  }
 
-    q[cite]:after {
-        content: close-quote " (" attr(cite) ")";
-    }
+  q[cite]:after {
+    content: close-quote " (" attr(cite) ")";
+  }
 }

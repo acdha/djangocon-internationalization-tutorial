@@ -22,13 +22,21 @@
   position: relative;
   left: 0;
   top: 0;
-  -webkit-transition: -webkit-transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  -webkit-transition: -webkit-transform 500ms ease-in-out,
+    opacity 500ms ease-in-out;
   -moz-transition: -moz-transform 500ms ease-in-out, opacity 500ms ease-in-out;
   -ms-transition: -ms-transform 500ms ease-in-out, opacity 500ms ease-in-out;
   -o-transition: -o-transform 500ms ease-in-out, opacity 500ms ease-in-out;
   transition: -webkit-transform 500ms ease-in-out, opacity 500ms ease-in-out;
 }
-.csstransitions.csstransforms .deck-container:not(.deck-menu) > .slide .deck-next, .csstransitions.csstransforms .deck-container:not(.deck-menu) > .slide .deck-after {
+.csstransitions.csstransforms
+  .deck-container:not(.deck-menu)
+  > .slide
+  .deck-next,
+.csstransitions.csstransforms
+  .deck-container:not(.deck-menu)
+  > .slide
+  .deck-after {
   visibility: visible;
   -webkit-transform: translate3d(0, 1600px, 0);
   -moz-transform: translate(0, 1600px);
@@ -64,10 +72,19 @@
   -o-transform: translate(0, 400%);
   transform: translate3d(0, 400%, 0);
 }
-.csstransitions.csstransforms .deck-container:not(.deck-menu) > .deck-before .slide, .csstransitions.csstransforms .deck-container:not(.deck-menu) > .deck-previous .slide {
+.csstransitions.csstransforms
+  .deck-container:not(.deck-menu)
+  > .deck-before
+  .slide,
+.csstransitions.csstransforms
+  .deck-container:not(.deck-menu)
+  > .deck-previous
+  .slide {
   visibility: visible;
 }
-.csstransitions.csstransforms .deck-container:not(.deck-menu) > .deck-child-current {
+.csstransitions.csstransforms
+  .deck-container:not(.deck-menu)
+  > .deck-child-current {
   -webkit-transform: none;
   -moz-transform: none;
   -ms-transform: none;
